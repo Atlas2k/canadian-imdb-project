@@ -45,23 +45,17 @@ public class generateSQL {
                         + "loginTimeout=30;";
 
         ResultSet resultSet = null;
+        Tables tables = new Tables();
+        try {Connection connection = DriverManager.getConnection(connectionUrl);
+             Statement statement = connection.createStatement();
+             tables.createTitleTable(statement);
 
-        try (Connection connection = DriverManager.getConnection(connectionUrl);
-             Statement statement = connection.createStatement();) {
-
-            // Create and execute a SELECT SQL statement.
-            String selectSql = "SELECT firstname, lastname, provinces.name from people join provinces on people.provinceID = provinces.provinceID;";
-            resultSet = statement.executeQuery(selectSql);
-
-            // Print results from select statement
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString(1) +
-                        " " + resultSet.getString(2) +
-                        " lives in " + resultSet.getString(3));
-            }
         }
+
         catch (SQLException e) {
              e.printStackTrace();
         }
     }
+
+
 }
