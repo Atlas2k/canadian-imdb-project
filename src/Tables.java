@@ -1,76 +1,44 @@
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Tables {
-    String titleid = "titleid text primarykey IDENTITY(1,1)";
-    String title = "title text not null";
-    String releaseDate = "releaseDate text not null ";
-    String isAdult = "isAdult boolean not null";
-    String imdbRating ="imdbRating double not null";
-    String language = "language text not null ";
-    String genreid ="genreid text primary key IDENTITY(1,1)";
-    String genreName = "genreName text not null";
-    String runtime= "runtime Integer not null";
-    String endDate = "endDate Integer not null";
-    String seasonNumber= "seasonNumber Integer not null";
-    String episodeNumber = "episodeNumber Integer not null";
-    String personId ="personId text primary key  IDENTITY(1,1)";
-    String name = "name text not null";
-    String dateOfBirth = "dateOfBirth Integer not null";
-    String dateOfPassing ="dateOfPassing Integer not null";
-    String jobId ="jobId text primary key IDENTITY(1,1)";
-    String jobName ="jobName text not null";
-    String character = "character text not null";
-    String position = "position text not null";
-    String platformId ="platformId text primary key IDENTITY(1,1)";
-    String platformName = "platformName text not null  IDENTITY(1,1)";
-    String dateAdded = "dateAdded Integer not null";
-
-
-
-
-    //
-    //
-    //
-    //
-    //
-
 
     //FOREIGN KEY("sid") REFERENCES "store"("id"),
     public  Tables(){}
 
 
-    public static void dropTables(Statement statement) throws SQLException {
+    public static void dropTables(Statement statement, ResultSet resultSet) throws SQLException {
         String selectSql = "drop table if exists title";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists genre";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists partOf";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists movies";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists shows";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists episode";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists have";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists people";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists knownFor";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists jobs";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists works";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists workedOn";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists characters";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists platform";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
         selectSql = "drop table if exists availableOn";
-        statement.executeQuery(selectSql);
+        statement.execute(selectSql);
 
     }
 
