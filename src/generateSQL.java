@@ -45,7 +45,6 @@ public class generateSQL {
                         + "loginTimeout=30;";
 
         ResultSet resultSet = null;
-        Tables tables = new Tables();
 
         try {
             // The newInstance() call is a work around for some
@@ -58,8 +57,8 @@ public class generateSQL {
         try {Connection connection = DriverManager.getConnection(connectionUrl);
              Statement statement = connection.createStatement();
 
-             Tables.dropTables(statement,resultSet);
-             //Tables.createTables(statement);
+             Tables.dropTables(statement);
+             Tables.createTables(statement);
              //Inserting into tables.
 
         }

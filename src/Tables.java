@@ -8,12 +8,18 @@ public class Tables {
     public  Tables(){}
 
 
-    public static void dropTables(Statement statement, ResultSet resultSet) throws SQLException {
-        String selectSql = "drop table if exists title";
+    public static void dropTables(Statement statement) throws SQLException {
+        String selectSql = "drop table if exists knownFor";
         statement.execute(selectSql);
-        selectSql = "drop table if exists genre";
+        selectSql = "drop table if exists works";
         statement.execute(selectSql);
         selectSql = "drop table if exists partOf";
+        statement.execute(selectSql);
+        selectSql = "drop table if exists have";
+        statement.execute(selectSql);
+        selectSql = "drop table if exists media";
+        statement.execute(selectSql);
+        selectSql = "drop table if exists genre";
         statement.execute(selectSql);
         selectSql = "drop table if exists movies";
         statement.execute(selectSql);
@@ -21,15 +27,9 @@ public class Tables {
         statement.execute(selectSql);
         selectSql = "drop table if exists episode";
         statement.execute(selectSql);
-        selectSql = "drop table if exists have";
-        statement.execute(selectSql);
         selectSql = "drop table if exists people";
         statement.execute(selectSql);
-        selectSql = "drop table if exists knownFor";
-        statement.execute(selectSql);
         selectSql = "drop table if exists jobs";
-        statement.execute(selectSql);
-        selectSql = "drop table if exists works";
         statement.execute(selectSql);
         selectSql = "drop table if exists workedOn";
         statement.execute(selectSql);
@@ -47,36 +47,36 @@ public class Tables {
 
 
     public static void createTables(Statement statement) throws SQLException {
-        String selectSql = "CREATE TABLE media (titleid text primarykey IDENTITY(1,1), title text not null, isAdult boolean not null, imdbRating double not null, language text not null);";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE genre (genreid text primary key IDENTITY(1,1), genreName text not null);";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE partOf (genreid text primary key IDENTITY(1,1), titleid text primarykey IDENTITY(1,1), FOREIGN KEY(genreid) REFERENCES genre(genreid),FOREIGN KEY(titleid) REFERENCES title(titleid));";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE movies (titleid text primarykey IDENTITY(1,1), title text not null, isAdult boolean not null, imdbRating double not null, language text not null, genreid text primary key IDENTITY(1,1), runtime Integer not null);";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE shows (titleid text primarykey IDENTITY(1,1), title text not null, isAdult boolean not null, imdbRating double not null, language text not null, genreid text primary key IDENTITY(1,1), endDate Integer not null);";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE episode (titleid text primarykey IDENTITY(1,1), title text not null, isAdult boolean not null, imdbRating double not null, language text not null, genreid text primary key IDENTITY(1,1), seasonNumber Integer not null, episodeNumber Integer not null);";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE have (titleidEpisode text primarykey IDENTITY(1,1),titleidShow text primarykey IDENTITY(1,1),FOREIGN KEY(titleidEpisode) REFERENCES episode(titleid),FOREIGN KEY(titleidShow) REFERENCES show(titleid) );";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE people (personId text primary key  IDENTITY(1,1), name text not null, dateOfBirth Integer not null, dateOfPassing Integer not null);";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE knownFor (personId text primary key  IDENTITY(1,1), titleid text primarykey IDENTITY(1,1),FOREIGN KEY(personId) REFERENCES person(id),FOREIGN KEY(personId) REFERENCES title(titleid));";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE jobs (jobId text primary key IDENTITY(1,1), jobName text not null);";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE works (personId text primary key  IDENTITY(1,1), jobId text primary key IDENTITY(1,1));";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE workedOn (titleid text primarykey IDENTITY(1,1), personId text primary key  IDENTITY(1,1), character text not null, position text not null);";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE characters (titleid text primarykey IDENTITY(1,1), personId text primary key  IDENTITY(1,1), character text not null);";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE platform (platformId text primary key IDENTITY(1,1), platformName text not null  IDENTITY(1,1));";
-        statement.executeQuery(selectSql);
-        selectSql = "CREATE TABLE availableOn (platformId text primary key IDENTITY(1,1), titleid text primarykey IDENTITY(1,1), dateAdded Integer not null);";
-        statement.executeQuery(selectSql);
+        String selectSql = "CREATE TABLE media(titleid INTEGER, title text not NULL, isAdult BIT not NULL, imdbRating float not NULL, language text not NULL, Primary Key(titleid));";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE genre(genreid INTEGER IDENTITY(1,1), genreName text not null, Primary Key(genreid));";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE partOf(genreid INTEGER, titleid INTEGER, FOREIGN KEY(genreid) REFERENCES genre(genreid), FOREIGN KEY(titleid) REFERENCES media(titleid));";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE movies(titleid INTEGER, title text not NULL, isAdult BIT not NULL, imdbRating float not NULL, language text not NULL, Primary Key(titleid), runtime INTEGER);";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE shows(titleid INTEGER, title text not NULL, isAdult BIT not NULL, imdbRating float not NULL, language text not NULL, Primary Key(titleid), endDate INTEGER);";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE episode(titleid INTEGER, title text not NULL, isAdult BIT not NULL, imdbRating float not NULL, language text not NULL, Primary Key(titleid), seasonNumber INTEGER, episodeNumber INTEGER);";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE have(titleidEpisode INTEGER, titleidShow INTEGER, FOREIGN KEY(titleidEpisode) REFERENCES episode(titleid), FOREIGN KEY(titleidShow) REFERENCES shows(titleid));";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE people(personId INTEGER, name text not null, dateOfBirth INTEGER, dateOfPassing INTEGER, Primary Key(personId));";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE knownFor(personId INTEGER, titleid INTEGER, FOREIGN KEY(personId) REFERENCES people(personId),FOREIGN KEY (personId) REFERENCES media(titleid));";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE jobs(jobId INTEGER IDENTITY(1,1), jobName text not null, Primary Key(jobId));";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE works (personId INTEGER, jobId INTEGER, FOREIGN KEY(personId) REFERENCES people(personId),FOREIGN KEY (jobId) REFERENCES jobs(jobId));";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE workedOn (titleid INTEGER, personId INTEGER, character text, position text);";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE characters(titleid INTEGER, personId INTEGER, character text);";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE platform (platformId INTEGER IDENTITY(1,1), platformName text not null, Primary Key (platformId));";
+        statement.execute(selectSql);
+        selectSql = "CREATE TABLE availableOn (platformId INTEGER, titleid text, dateAdded INTEGER);";
+        statement.execute(selectSql);
 
     }
 }
