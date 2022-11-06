@@ -46,14 +46,6 @@ public class generateSQL {
 
         ResultSet resultSet = null;
 
-        try {
-            // The newInstance() call is a work around for some
-            // broken Java implementations
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (Exception ex) {
-            // handle the error
-        }
-
         try {Connection connection = DriverManager.getConnection(connectionUrl);
              Statement statement = connection.createStatement();
 
