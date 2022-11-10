@@ -1,11 +1,11 @@
 
-build: SQLServerDemo.class
+build: generateSQL.class
 
-SQLServerDemo.class: SQLServerDemo.java
-	javac SQLServerDemo.java
+generateSQL.class: generateSQL.java
+	javac generateSQL.java
 
-run: SQLServerDemo.class
-	java -cp .:mssql-jdbc-11.2.0.jre11.jar SQLServerDemo
+run: generateSQL.class
+	java -cp .:mssql-jdbc-11.2.0.jre11.jar generateSQL
 
 clean:
-	rm SQLServerDemo.class
+	rm generateSQL.class
