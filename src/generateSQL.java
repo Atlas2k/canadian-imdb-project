@@ -15,7 +15,7 @@ public class generateSQL {
     public static void main(String[] args) {
 
         Properties prop = new Properties();
-        String fileName = "C:\\Users\\akint\\OneDrive\\Desktop\\movies\\src\\auth.cfg";
+        String fileName = "auth.cfg";
         try {
             FileInputStream configFile = new FileInputStream(fileName);
             prop.load(configFile);
