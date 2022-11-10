@@ -47,20 +47,15 @@ public class Tables {
 
 
     public static void createTables(Statement statement) throws SQLException {
-        String selectSql = "CREATE TABLE media(titleid INTEGER, title text not NULL, isAdult BIT not NULL, imdbRating float not NULL, language text not NULL, Primary Key(titleid));";
+        String selectSql = "CREATE TABLE media(titleid INTEGER, title text, isAdult BIT, imdbRating float, language text, startYear INTEGER, endYear INTEGER, runTime INTEGER, seasonNumber INTEGER, episodeNumber INTEGER, Primary Key(titleid));";
         statement.execute(selectSql);
-        selectSql = "CREATE TABLE genre(genreid INTEGER IDENTITY(1,1), genreName text not null, Primary Key(genreid));";
+        selectSql = "CREATE TABLE genre(genreid INTEGER IDENTITY(1,1), genreName null, Primary Key(genreid));";
         statement.execute(selectSql);
         selectSql = "CREATE TABLE partOf(genreid INTEGER, titleid INTEGER, FOREIGN KEY(genreid) REFERENCES genre(genreid), FOREIGN KEY(titleid) REFERENCES media(titleid));";
         statement.execute(selectSql);
-        selectSql = "CREATE TABLE movies(titleid INTEGER, title text not NULL, isAdult BIT not NULL, imdbRating float not NULL, language text not NULL, Primary Key(titleid), runtime INTEGER);";
+        selectSql = "CREATE TABLE have(titleidEpisode INTEGER, titleidShow INTEGER, FOREIGN KEY(titleidEpisode) REFERENCES media(titleid), FOREIGN KEY(titleidShow) REFERENCES media(titleid));";
         statement.execute(selectSql);
-        selectSql = "CREATE TABLE shows(titleid INTEGER, title text not NULL, isAdult BIT not NULL, imdbRating float not NULL, language text not NULL, Primary Key(titleid), endDate INTEGER);";
-        statement.execute(selectSql);
-        selectSql = "CREATE TABLE episode(titleid INTEGER, title text not NULL, isAdult BIT not NULL, imdbRating float not NULL, language text not NULL, Primary Key(titleid), seasonNumber INTEGER, episodeNumber INTEGER);";
-        statement.execute(selectSql);
-        selectSql = "CREATE TABLE have(titleidEpisode INTEGER, titleidShow INTEGER, FOREIGN KEY(titleidEpisode) REFERENCES episode(titleid), FOREIGN KEY(titleidShow) REFERENCES shows(titleid));";
-        statement.execute(selectSql);
+
         selectSql = "CREATE TABLE people(personId INTEGER, name text not null, dateOfBirth INTEGER, dateOfPassing INTEGER, Primary Key(personId));";
         statement.execute(selectSql);
         selectSql = "CREATE TABLE knownFor(personId INTEGER, titleid INTEGER, FOREIGN KEY(personId) REFERENCES people(personId),FOREIGN KEY (personId) REFERENCES media(titleid));";
