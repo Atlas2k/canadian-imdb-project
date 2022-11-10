@@ -49,7 +49,7 @@ public class Tables {
     public static void createTables(Statement statement) throws SQLException {
         String selectSql = "CREATE TABLE media(titleid INTEGER, title text, isAdult BIT, imdbRating float, language text, startYear INTEGER, endYear INTEGER, runTime INTEGER, seasonNumber INTEGER, episodeNumber INTEGER, Primary Key(titleid));";
         statement.execute(selectSql);
-        selectSql = "CREATE TABLE genre(genreid INTEGER IDENTITY(1,1), genreName null, Primary Key(genreid));";
+        selectSql = "CREATE TABLE genre(genreid INTEGER IDENTITY(1,1), genreName text, Primary Key(genreid));";
         statement.execute(selectSql);
         selectSql = "CREATE TABLE partOf(genreid INTEGER, titleid INTEGER, FOREIGN KEY(genreid) REFERENCES genre(genreid), FOREIGN KEY(titleid) REFERENCES media(titleid));";
         statement.execute(selectSql);
