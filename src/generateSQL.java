@@ -67,7 +67,15 @@ public class generateSQL {
 
     public String yourSearch(String input) throws SQLException {
         queries query = new queries();
-        return query.searchActor(resultSet,statement);
+        if(input.split(" ")[0].compareTo("a")==0){
+            return query.searchID(resultSet,statement,input.split(" ")[1]);
+        } // a is for searching by id
+
+        if(input.split(" ")[0].compareTo("b")==0){
+            return query.searchName(resultSet,statement,input.split(" ")[1]);
+        } // a is for searching by id
+
+        return null;
     }
 
 }

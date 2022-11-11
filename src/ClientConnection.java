@@ -56,7 +56,7 @@ public class ClientConnection implements Runnable {
                     myServer.sendMessageToUI("Connection was unexpectedly reset by remote host; stopping thread and disconnecting client: "+ clientSocket.getRemoteSocketAddress());
                 else
                     myServer.sendMessageToUI("Cannot read from socket; stopping thread and disconnecting client." + clientSocket.getRemoteSocketAddress() + "error message is: "+ e);
-                disconnectClient();
+                //disconnectClient();
                 stopThisThread = true;
             }
         }
