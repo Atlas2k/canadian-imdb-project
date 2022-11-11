@@ -47,9 +47,7 @@ public class movies {
         System.out.println("mc - Authors with books in the most cities");
         System.out.println("mr - Most read book by country");
         System.out.println("");
-
         System.out.println("q - Exit the program");
-
         System.out.println("---- end help ----- ");
     }
 }

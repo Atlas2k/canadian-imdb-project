@@ -14,9 +14,10 @@ public class generateSQL {
     Statement statement;
     // Connect to your database.
     // Replace server name, username, and password with your credentials
+
     public generateSQL() {
         Properties prop = new Properties();
-        String fileName = "auth.cfg";
+        String fileName = "C:\\Users\\akint\\OneDrive\\Desktop\\movies\\src\\auth.cfg";
         try {
             FileInputStream configFile = new FileInputStream(fileName);
             prop.load(configFile);
@@ -64,18 +65,9 @@ public class generateSQL {
 
     }
 
-
     public String yourSearch(String input) throws SQLException {
         queries query = new queries();
         return query.searchActor(resultSet,statement);
     }
-
-
-
-
-
-
-
-
 
 }
