@@ -1,11 +1,13 @@
 
-build: generateSQL.class
+build: movies.class
 
-generateSQL.class: generateSQL.java
-	javac generateSQL.java
+movies.class: movies.java
+	javac movies.java
 
-run: generateSQL.class
-	java -cp .:mssql-jdbc-11.2.0.jre18.jar generateSQL
+run: movies.class
+	java -cp .:mssql-jdbc-11.2.0.jre18.jar movies
 
 clean:
+	rm movies.class
+	rm Tables.class
 	rm generateSQL.class
