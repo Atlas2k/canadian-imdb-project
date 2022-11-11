@@ -3,3 +3,5 @@
 auth.cfg
 Tables.class
 generateSQL.class
+src/movies.class
+src/queries.class
