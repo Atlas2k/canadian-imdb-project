@@ -7,7 +7,7 @@ public class dbScript {
     public static void main(String[] args) {
         try {
             System.out.println("Please enter the input file name (.txt files only):");
-            Scanner inputTxt = new Scanner(new FileReader(new File((new Scanner("C:\\Users\\akint\\OneDrive\\Desktop\\movies\\src\\data.tsv")).nextLine())));
+            Scanner inputTxt = new Scanner(new FileReader(new File((new Scanner("data.tsv")).nextLine())));
             processing(inputTxt);
             System.out.println("Program terminated normally.");
         } catch (Exception e) {

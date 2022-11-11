@@ -16,7 +16,7 @@ public class generateSQL {
     // Replace server name, username, and password with your credentials
     public generateSQL() {
         Properties prop = new Properties();
-        String fileName = "C:\\Users\\akint\\OneDrive\\Desktop\\movies\\src\\auth.cfg";
+        String fileName = "auth.cfg";
         try {
             FileInputStream configFile = new FileInputStream(fileName);
             prop.load(configFile);
