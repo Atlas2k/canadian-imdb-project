@@ -11,3 +11,4 @@ clean:
 	rm movies.class
 	rm Tables.class
 	rm generateSQL.class
+	rm queries.class
