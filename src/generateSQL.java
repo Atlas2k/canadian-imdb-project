@@ -10,10 +10,11 @@ import java.util.Properties;
 
 public class generateSQL {
 
+    ResultSet resultSet;
+    Statement statement;
     // Connect to your database.
     // Replace server name, username, and password with your credentials
-    public static void main(String[] args) {
-
+    public generateSQL() {
         Properties prop = new Properties();
         String fileName = "C:\\Users\\akint\\OneDrive\\Desktop\\movies\\src\\auth.cfg";
         try {
@@ -44,21 +45,36 @@ public class generateSQL {
                         + "trustServerCertificate=false;"
                         + "loginTimeout=30;";
 
-        ResultSet resultSet = null;
+        this.resultSet = null;
 
         try {Connection connection = DriverManager.getConnection(connectionUrl);
-             Statement statement = connection.createStatement();
 
+             this.statement = connection.createStatement();
              Tables.dropTables(statement);
              Tables.createTables(statement);
-             //Inserting into tables.
+            String selectSql = "insert into people(personId,name,dateOfBirth,dateOfPassing) values (023523, 'Mayokun', 2001, null);";
+            statement.execute(selectSql);
+             //queries.searchActor(resultSet,statement);
 
         }
 
         catch (SQLException e) {
              e.printStackTrace();
         }
+
     }
+
+
+    public String yourSearch(String input) throws SQLException {
+        queries query = new queries();
+        return query.searchActor(resultSet,statement);
+    }
+
+
+
+
+
+
 
 
 
