@@ -15,7 +15,7 @@ csv.field_size_limit(sys.maxsize)
 """titleId, primaryTitle, isAdult, startYear, endYear, runTimeMinutes"""
 titlesData = [[0, "", 0, 0, 0, 0]]
 genres = {}
-titleGenres = [] # part of 
+titleGenres = []  # part of
 
 with open("title.basics.tsv") as file:
     titles = csv.reader(file, delimiter="\t")
@@ -60,10 +60,12 @@ for value in titlesData:
 
 sqlFileGenres = open("genres.title.basics.sql", "w")
 for value in genres:
-    preparedSql = "insert into table genre (genreid, genreName) values (%s, \"%s\");\n" % (genres[value], value)
+    preparedSql = "insert into table genre (genreid, genreName) values (%s, \"%s\");\n" % (
+        genres[value], value)
     sqlFileGenres.write(preparedSql)
 
 sqlFilePartOf = open("partOf.title.basics.sql", "w")
 for value in titleGenres:
-    preparedSql = "inset into table partOf (genreid, titleid) value (%s, %s);\n" % (value[1], value[0])
+    preparedSql = "inset into table partOf (genreid, titleid) value (%s, %s);\n" % (
+        value[1], value[0])
     sqlFilePartOf.write(preparedSql)
