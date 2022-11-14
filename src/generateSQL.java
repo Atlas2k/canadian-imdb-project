@@ -16,7 +16,7 @@ public class generateSQL {
 
     public generateSQL() {
         Properties prop = new Properties();
-        String fileName = "C:\\Users\\akint\\OneDrive\\Desktop\\movies\\src\\auth.cfg";
+        String fileName = "auth.cfg";
         try {
             FileInputStream configFile = new FileInputStream(fileName);
             prop.load(configFile);
@@ -60,8 +60,8 @@ public class generateSQL {
             // loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.basics.sql");
             //IMDB ratings
             //loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.ratings.sql");
-            connection.createStatement().execute("Delete from media where titleid = 0;");
-            connection.createStatement().execute("Delete from media where titleid is NULL;");
+//            connection.createStatement().execute("Delete from media where titleid = 0;");
+//            connection.createStatement().execute("Delete from media where titleid is NULL;");
 
 
 

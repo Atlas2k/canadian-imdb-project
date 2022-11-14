@@ -20,18 +20,18 @@ with open("title.akas.tsv") as file:
     i = 0
     for line in titles:
         temp = []
-        if i != 0 and (line[3] == "US" or line[3] == "CA") and (int(line[0][2:]) != keptTitlesData[len(keptTitlesData) - 1][0]):
+        if i != 0 and line[3] == "CA" and (line[4] == "en" or line[4] == "\\N") and (int(line[0][2:]) != keptTitlesData[len(keptTitlesData) - 1][0]):
             temp.append(int(line[0][2:]))
             temp.append("null")
             if line[4] == "\\N":
                 temp.append("null")
             else:
-                temp.append("\""+line[4]+"\"")
+                temp.append(line[4])
             keptTitlesData.append(temp)
         i += 1
 
 sqlFile = open("title.akas.sql", "w")
 for value in keptTitlesData:
-    preparedSql = "insert into table media (titleid, title, language) values (%s, %s, %s);\n" % (
+    preparedSql = "insert into media (titleid, title, language) values (%s, %s, \'%s\');\n" % (
         value[0], value[1], value[2])
     sqlFile.write(preparedSql)

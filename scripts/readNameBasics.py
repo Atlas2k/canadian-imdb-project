@@ -14,6 +14,25 @@ peopleData = [[0, "", 0, 0]]
 knownForData = []
 jobs = {}
 peopleJobs = []
+keptTitlesData = {}
+keptPeopleData = {}
+
+with open("title.akas.tsv") as file:
+    titles = csv.reader(file, delimiter="\t")
+    i = 0
+    for line in titles:
+        if i != 0 and line[3] == "CA" and (line[4] == "en" or line[4] == "\\N") and int(line[0][2:] not in keptTitlesData):
+            keptTitlesData[(int(line[0][2:]))] = ""
+        i += 1
+
+with open("title.principals.tsv") as file:
+    titles = csv.reader(file, delimiter="\t")
+    i = 0
+    for line in titles:
+        if i != 0 and int(line[0][2:]) in keptTitlesData and int(line[2][2:] not in keptPeopleData):
+            keptPeopleData[(int(line[2][2:]))] = ""
+        i += 1
+    
 
 with open("name.basics.tsv") as file:
     people = csv.reader(file, delimiter="\t")
@@ -22,9 +41,9 @@ with open("name.basics.tsv") as file:
     for line in people:
         temp = []
         tempKnownFor = []
-        if i != 0:
+        if i != 0 and int(line[0][2:]) in keptPeopleData:
             temp.append(int(line[0][2:]))  # peopleId
-            temp.append(line[1])  # name
+            temp.append(line[1].replace("'", "\""))  # name
             temp.append(line[2])  # birthYear
             temp.append(line[3])  # deathYear
             for i in range(1, len(temp)):
@@ -36,7 +55,7 @@ with open("name.basics.tsv") as file:
             tempKnownFor.append(int(line[0][2:]))  # peopleId
             knownFor = line[5].split(",")
             if knownFor[0] != "\\N":
-                for title in knownFor:
+                for title in knownFor[:1]:
                     knownForData.append([int(line[0][2:]), int(title[2:])])
             else:
                 knownForData.append([int(line[0][2:]), "null"])
@@ -61,24 +80,24 @@ with open("name.basics.tsv") as file:
 
 sqlFile = open("name.basics.sql", "w")
 for value in peopleData:
-    prepareSql = "insert into table people (personId, name, birthYear, deathYear) values (%s, \"%s\", %s, %s);\n" % (
+    prepareSql = "insert into people (personId, name, birthYear, deathYear) values (%s, \'%s\', %s, %s);\n" % (
         value[0], value[1], value[2], value[3])
     sqlFile.write(prepareSql)
 
 sqlFile = open("knownFor.name.basics.sql", "w")
 for value in knownForData:
-    prepareSql = "insert into table knownFor (personId, titleId) value (%s, %s);\n" % (
+    prepareSql = "insert into knownFor (personId, titleId) value (%s, %s);\n" % (
         value[0], value[1])
     sqlFile.write(prepareSql)
 
 sqlFileGenres = open("jobs.name.basics.sql", "w")
 for value in jobs:
-    preparedSql = "insert into table jobs (jobId, jobName) values (%s, \"%s\");\n" % (
+    preparedSql = "insert into jobs (jobId, jobName) values (%s, \'%s\');\n" % (
         jobs[value], value)
     sqlFileGenres.write(preparedSql)
 
 sqlFilePartOf = open("works.name.basics.sql", "w")
 for value in peopleJobs:
-    preparedSql = "inset into table works (jobId, personId) value (%s, %s);\n" % (
+    preparedSql = "inset into works (jobId, personId) value (%s, %s);\n" % (
         value[1], value[0])
     sqlFilePartOf.write(preparedSql)
