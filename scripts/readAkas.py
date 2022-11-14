@@ -32,6 +32,6 @@ with open("title.akas.tsv") as file:
 
 sqlFile = open("title.akas.sql", "w")
 for value in keptTitlesData:
-    preparedSql = "insert into table media (titleid, title, language) values (%s, %s, %s);\n" % (
+    preparedSql = "insert into media (titleid, title, language) values (%s, %s, %s);\n" % (
         value[0], value[1], value[2])
     sqlFile.write(preparedSql)

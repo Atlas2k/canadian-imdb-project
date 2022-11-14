@@ -61,24 +61,24 @@ with open("name.basics.tsv") as file:
 
 sqlFile = open("name.basics.sql", "w")
 for value in peopleData:
-    prepareSql = "insert into table people (personId, name, birthYear, deathYear) values (%s, \"%s\", %s, %s);\n" % (
+    prepareSql = "insert into people (personId, name, birthYear, deathYear) values (%s, \'%s\', %s, %s);\n" % (
         value[0], value[1], value[2], value[3])
     sqlFile.write(prepareSql)
 
 sqlFile = open("knownFor.name.basics.sql", "w")
 for value in knownForData:
-    prepareSql = "insert into table knownFor (personId, titleId) value (%s, %s);\n" % (
+    prepareSql = "insert into knownFor (personId, titleId) value (%s, %s);\n" % (
         value[0], value[1])
     sqlFile.write(prepareSql)
 
 sqlFileGenres = open("jobs.name.basics.sql", "w")
 for value in jobs:
-    preparedSql = "insert into table jobs (jobId, jobName) values (%s, \"%s\");\n" % (
+    preparedSql = "insert into jobs (jobId, jobName) values (%s, \'%s\');\n" % (
         jobs[value], value)
     sqlFileGenres.write(preparedSql)
 
 sqlFilePartOf = open("works.name.basics.sql", "w")
 for value in peopleJobs:
-    preparedSql = "inset into table works (jobId, personId) value (%s, %s);\n" % (
+    preparedSql = "inset into works (jobId, personId) value (%s, %s);\n" % (
         value[1], value[0])
     sqlFilePartOf.write(preparedSql)

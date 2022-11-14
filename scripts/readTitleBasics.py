@@ -54,18 +54,18 @@ with open("title.basics.tsv") as file:
 
 sqlFile = open("title.basics.sql", "w")
 for value in titlesData:
-    preparedSql = "update table media set title=\"%s\", isAdult=%s, startYear=%s, endYear=%s, runtime=%s where titleid = %s;\n" % (
+    preparedSql = "update media set title=\'%s\', isAdult=%s, startYear=%s, endYear=%s, runtime=%s where titleid = %s;\n" % (
         value[1], value[2], value[3], value[4], value[5], value[0])
     sqlFile.write(preparedSql)
 
 sqlFileGenres = open("genres.title.basics.sql", "w")
 for value in genres:
-    preparedSql = "insert into table genre (genreid, genreName) values (%s, \"%s\");\n" % (
+    preparedSql = "insert into genre (genreid, genreName) values (%s, \'%s\');\n" % (
         genres[value], value)
     sqlFileGenres.write(preparedSql)
 
 sqlFilePartOf = open("partOf.title.basics.sql", "w")
 for value in titleGenres:
-    preparedSql = "inset into table partOf (genreid, titleid) value (%s, %s);\n" % (
+    preparedSql = "inset into partOf (genreid, titleid) value (%s, %s);\n" % (
         value[1], value[0])
     sqlFilePartOf.write(preparedSql)

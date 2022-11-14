@@ -28,7 +28,7 @@ with open("title.episode.tsv") as file:
 
 sqlFile = open("title.episode.sql", "w")
 for value in titlesData:
-    preparedSql = "update table media set episodeNumber=%s, seasonNumber=%s where titleid = %s;\n" % (value[3], value[2], value[0])
+    preparedSql = "update media set episodeNumber=%s, seasonNumber=%s where titleid = %s;\n" % (value[3], value[2], value[0])
     sqlFile.write(preparedSql)
-    prepareSql= "insert into table have (titleidEpisode, titleidShow) values (%s, %s);\n" % (value[0], value[1])
+    prepareSql= "insert into have (titleidEpisode, titleidShow) values (%s, %s);\n" % (value[0], value[1])
     sqlFile.write(prepareSql)

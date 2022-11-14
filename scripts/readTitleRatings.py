@@ -22,5 +22,5 @@ with open("title.ratings.tsv") as file:
 
 sqlFile = open("title.ratings.sql", "w")
 for value in titlesData:
-    preparedSql = "update table media set imdbRating=%s where titleid = %s;\n" % (value[1], value[0])
+    preparedSql = "update media set imdbRating=%s where titleid = %s;\n" % (value[1], value[0])
     sqlFile.write(preparedSql)
