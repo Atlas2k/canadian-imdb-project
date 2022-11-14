@@ -54,8 +54,22 @@ public class generateSQL {
              Tables.createTables(statement);
 
             System.out.println("Exporting ....");
-             //titlesAkas
-            loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.akas.sql");
+            //titlesAkas
+           // loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.Akas.sql");
+            //tile name, isadult, language ,start year, end year
+            // loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.basics.sql");
+            //IMDB ratings
+            //loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.ratings.sql");
+            connection.createStatement().execute("Delete from media where titleid = 0;");
+            connection.createStatement().execute("Delete from media where titleid is NULL;");
+
+
+
+
+
+
+
+            loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\partOf.title.basics.sql");
 
 
 
@@ -90,8 +104,8 @@ public class generateSQL {
         BufferedReader reader = new BufferedReader(new FileReader(script));
         String line = reader.readLine();
         // assumes each query is its own line
+        System.out.println(line);
         while (line != null) {
-            System.out.println(line);
             this.connection.createStatement().execute(line);
             line = reader.readLine();
         }

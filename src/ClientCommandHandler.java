@@ -25,6 +25,8 @@ public class ClientCommandHandler {
         }
 
     }
+
+    //a , id = 234242, name = top cruise
     
     public void instructionHandler(ClientConnection myClientConnection, String theCommand) throws SQLException {
     byte msg;
