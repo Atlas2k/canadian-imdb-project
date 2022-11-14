@@ -52,16 +52,15 @@ public class Tables {
         statement.execute(selectSql);
         selectSql = "CREATE TABLE have(titleidEpisode INTEGER, titleidShow INTEGER, FOREIGN KEY(titleidEpisode) REFERENCES media(titleid), FOREIGN KEY(titleidShow) REFERENCES media(titleid));";
         statement.execute(selectSql);
-
-        selectSql = "CREATE TABLE people(personId INTEGER, name text, dateOfBirth INTEGER, dateOfPassing INTEGER, Primary Key(personId));";
+        selectSql = "CREATE TABLE people(personId INTEGER, name text, birthYear INTEGER, deathYear INTEGER, Primary Key(personId));";
         statement.execute(selectSql);
-
         selectSql = "CREATE TABLE knownFor(personId INTEGER, titleid INTEGER, FOREIGN KEY(personId) REFERENCES people(personId),FOREIGN KEY (personId) REFERENCES media(titleid));";
         statement.execute(selectSql);
         selectSql = "CREATE TABLE jobs(jobId INTEGER IDENTITY(1,1), jobName text not null, Primary Key(jobId));";
         statement.execute(selectSql);
         selectSql = "CREATE TABLE works (personId INTEGER, jobId INTEGER, FOREIGN KEY(personId) REFERENCES people(personId),FOREIGN KEY (jobId) REFERENCES jobs(jobId));";
         statement.execute(selectSql);
+
         selectSql = "CREATE TABLE workedOn (titleid INTEGER, personId INTEGER, character text, position text);";
         statement.execute(selectSql);
         selectSql = "CREATE TABLE characters(titleid INTEGER, personId INTEGER, character text);";
