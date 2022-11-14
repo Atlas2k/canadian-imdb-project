@@ -1,6 +1,4 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -12,6 +10,7 @@ public class generateSQL {
 
     ResultSet resultSet;
     Statement statement;
+    Connection connection;
     // Connect to your database.
     // Replace server name, username, and password with your credentials
 
@@ -48,18 +47,26 @@ public class generateSQL {
 
         this.resultSet = null;
 
-        try {Connection connection = DriverManager.getConnection(connectionUrl);
+        try {this.connection = DriverManager.getConnection(connectionUrl);
 
              this.statement = connection.createStatement();
              Tables.dropTables(statement);
              Tables.createTables(statement);
-            String selectSql = "insert into people(personId,name,dateOfBirth,dateOfPassing) values (023523, 'Mayokun', 2001, null);";
-            statement.execute(selectSql);
+
+            System.out.println("Exporting ....");
+             //titlesAkas
+            loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.akas.sql");
+
+
+
+//            String selectSql = "insert into media (titleid, title, language) values (0, null, en);";
+//            statement.execute(selectSql);
+
              //queries.searchActor(resultSet,statement);
 
         }
 
-        catch (SQLException e) {
+        catch (SQLException | IOException e) {
              e.printStackTrace();
         }
 
@@ -76,6 +83,18 @@ public class generateSQL {
         } // a is for searching by id
 
         return null;
+    }
+
+
+    public void loadData(String script) throws IOException, SQLException {
+        BufferedReader reader = new BufferedReader(new FileReader(script));
+        String line = reader.readLine();
+        // assumes each query is its own line
+        while (line != null) {
+            System.out.println(line);
+            this.connection.createStatement().execute(line);
+            line = reader.readLine();
+        }
     }
 
 }
