@@ -42,7 +42,7 @@ with open("name.basics.tsv") as file:
         temp = []
         tempKnownFor = []
         if i != 0 and int(line[0][2:]) in keptPeopleData:
-            temp.append(int(line[0][2:]))  # peopleId
+            temp.append(int(line[0][2:]))  # personId
             temp.append(line[1].replace("'", "\""))  # name
             temp.append(line[2])  # birthYear
             temp.append(line[3])  # deathYear
@@ -52,7 +52,7 @@ with open("name.basics.tsv") as file:
             peopleData.append(temp)
 
             # Handling known for
-            tempKnownFor.append(int(line[0][2:]))  # peopleId
+            tempKnownFor.append(int(line[0][2:]))  # personId
             knownFor = line[5].split(",")
             if knownFor[0] != "\\N":
                 for title in knownFor[:1]:
@@ -98,6 +98,6 @@ for value in jobs:
 
 sqlFilePartOf = open("works.name.basics.sql", "w")
 for value in peopleJobs:
-    preparedSql = "inset into works (jobId, personId) value (%s, %s);\n" % (
+    preparedSql = "insert into works (jobId, personId) value (%s, %s);\n" % (
         value[1], value[0])
     sqlFilePartOf.write(preparedSql)
