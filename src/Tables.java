@@ -1,4 +1,3 @@
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -25,9 +24,9 @@ public class Tables {
         statement.execute(selectSql);
         selectSql = "drop table if exists characters";
         statement.execute(selectSql);
-        selectSql = "drop table if exists platform";
-        statement.execute(selectSql);
         selectSql = "drop table if exists availableOn";
+        statement.execute(selectSql);
+        selectSql = "drop table if exists platform";
         statement.execute(selectSql);
         selectSql = "drop table if exists people";
         statement.execute(selectSql);
