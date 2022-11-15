@@ -114,6 +114,7 @@ public class generateSQL {
             this.connection.createStatement().execute(line);
             line = reader.readLine();
         }
+        reader.close();
     }
 
 }
