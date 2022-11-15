@@ -91,6 +91,8 @@ public class generateSQL {
 
         // Loading platform data
         System.out.println("Loading the platform table and relations...");
+        loadData("platform.sql");
+        loadData("availableOn.sql");
     }
 
     public String yourSearch(String input) throws SQLException {
@@ -110,7 +112,6 @@ public class generateSQL {
         BufferedReader reader = new BufferedReader(new FileReader(script));
         String line = reader.readLine();
         // assumes each query is its own line
-        System.out.println(line);
         while (line != null) {
             this.connection.createStatement().execute(line);
             line = reader.readLine();

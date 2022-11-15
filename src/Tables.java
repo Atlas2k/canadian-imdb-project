@@ -58,7 +58,7 @@ public class Tables {
         statement.execute(selectSql);
         selectSql = "CREATE TABLE platform (platformId INTEGER, platformName text, Primary Key (platformId));";
         statement.execute(selectSql);
-        selectSql = "CREATE TABLE availableOn (platformId INTEGER, titleId INTEGER, dateAdded INTEGER, FOREIGN KEY(platformId) REFERENCES platform(platformId), FOREIGN KEY (titleId) REFERENCES media(titleId));";
+        selectSql = "CREATE TABLE availableOn (platformId INTEGER, titleId INTEGER, dateAdded text, FOREIGN KEY(platformId) REFERENCES platform(platformId), FOREIGN KEY (titleId) REFERENCES media(titleId));";
         statement.execute(selectSql);
     }
 
