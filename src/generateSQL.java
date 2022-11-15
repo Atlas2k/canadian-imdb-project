@@ -53,31 +53,36 @@ public class generateSQL {
              Tables.dropTables(statement);
              Tables.createTables(statement);
 
-            System.out.println("Exporting ....");
-            //titlesAkas
-           // loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.Akas.sql");
-            //tile name, isadult, language ,start year, end year
-            // loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.basics.sql");
-            //IMDB ratings
-            //loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\title.ratings.sql");
-//            connection.createStatement().execute("Delete from media where titleid = 0;");
-//            connection.createStatement().execute("Delete from media where titleid is NULL;");
+            System.out.println("Loading Data From Scripts Into Server. Please Wait...");
+            System.out.println("Loading the media table...");
+            loadData("title.akas.sql");
+            loadData("title.basics.sql");
+            loadData("title.ratings.sql");
+            connection.createStatement().execute("Delete from media where titleId = 0;");
+            connection.createStatement().execute("Delete from media where titleId is NULL;");
 
+            System.out.println("Loading the genres table and realtion...");
+            loadData("genres.title.basics.sql");
+            loadData("partOf.title.basics.sql");
+            
+            System.out.println("Loading the having (episodes) table...");
+            loadData("title.episode.sql");
 
+            // Loading the people table
+            System.out.println("Loading the people table relations...");
+            loadData("name.basics.sql");
+            loadData("knownFor.name.basics.sql");
+            loadData("jobs.names.basics.sql");
+            loadData("works.name.basics.sql");
+            connection.createStatement().execute("Delete from people where personId = 0;");
 
+            // Loading cast and character data 
+            System.out.println("Loading the cast and character tables...");
+            loadData("title.principals.sql");
+            loadData("characters.title.principals.sql");
 
-
-
-
-            loadData("C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\partOf.title.basics.sql");
-
-
-
-//            String selectSql = "insert into media (titleid, title, language) values (0, null, en);";
-//            statement.execute(selectSql);
-
-             //queries.searchActor(resultSet,statement);
-
+            // Loading platform data
+            System.out.println("Loading the platform table and relations...");
         }
 
         catch (SQLException | IOException e) {
