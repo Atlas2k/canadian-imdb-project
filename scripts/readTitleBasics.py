@@ -64,9 +64,10 @@ with open("title.basics.tsv") as file:
 
 sqlFile = open("title.basics.sql", "w")
 for value in titlesData:
-    preparedSql = "update media set title=\'%s\', isAdult=%s, startYear=%s, endYear=%s, runtime=%s where titleid = %s;\n" % (
-        value[1], value[2], value[3], value[4], value[5], value[0])
-    sqlFile.write(preparedSql)
+    if value[0] !=0:
+        preparedSql = "update media set title=\'%s\', isAdult=%s, startYear=%s, endYear=%s, runtime=%s where titleid = %s;\n" % (
+            value[1], value[2], value[3], value[4], value[5], value[0])
+        sqlFile.write(preparedSql)
 
 sqlFileGenres = open("genres.title.basics.sql", "w")
 for value in genres:

@@ -13,15 +13,28 @@ csv.field_size_limit(sys.maxsize)
 peopleData = [[0, 0, ""]]
 """titleId, personId, character"""
 charactersData = [[0, 0, "character"]]
-keptTitlesData = {}
 keptPeopleData = {}
+keptPeopleDataPrincipals = {}
+keptTitlesDataAkas = {}
+keptTitlesData = {}
+
 
 with open("title.akas.tsv") as file:
     titles = csv.reader(file, delimiter="\t")
     i = 0
     for line in titles:
-        if i != 0 and line[3] == "CA" and (line[4] == "en" or line[4] == "\\N") and int(line[0][2:] not in keptTitlesData):
-            keptTitlesData[(int(line[0][2:]))] = ""
+        if i != 0 and line[3] == "CA" and (line[4] == "en" or line[4] == "\\N") and int(line[0][2:] not in keptTitlesDataAkas):
+            keptTitlesDataAkas[(int(line[0][2:]))] = ""
+        i += 1
+
+with open("title.basics.tsv") as file:
+    titles = csv.reader(file, delimiter="\t")
+    i = 0
+    for line in titles:
+        temp = []
+        if i != 0:
+            if (line[1] == "movie" or line[1] == "tvSeries" or line[1] == "tvEpisode") and len(line) == 9 and int(line[0][2:]) in keptTitlesDataAkas:
+                keptTitlesData[int(line[0][2:])] = ""
         i += 1
 
 with open("title.principals.tsv") as file:
@@ -29,9 +42,18 @@ with open("title.principals.tsv") as file:
     i = 0
     for line in titles:
         if i != 0 and int(line[0][2:]) in keptTitlesData and int(line[2][2:] not in keptPeopleData):
-            keptPeopleData[(int(line[2][2:]))] = ""
+            keptPeopleDataPrincipals[(int(line[2][2:]))] = ""
         i += 1
-    
+
+with open("name.basics.tsv") as file:
+    people = csv.reader(file, delimiter="\t")
+    i = 0
+    for line in people:
+        temp = []
+        tempKnownFor = []
+        if i != 0 and int(line[0][2:]) in keptPeopleDataPrincipals:
+            keptPeopleData[(int(line[0][2:]))] = ""
+        i += 1
 
 with open("title.principals.tsv") as file:
     role = csv.reader(file, delimiter="\t")
@@ -62,12 +84,14 @@ with open("title.principals.tsv") as file:
 
 sqlFile = open("title.principals.sql", "w")
 for value in peopleData:
-    prepareSql = "insert into workedOn (titleId, personId, position) values (%s, %s, \'%s\');\n" % (
-        value[0], value[1], value[2])
-    sqlFile.write(prepareSql)
+    if value[0] != 0:
+        prepareSql = "insert into workedOn (titleId, personId, position) values (%s, %s, \'%s\');\n" % (
+            value[0], value[1], value[2])
+        sqlFile.write(prepareSql)
 
 sqlFile = open("characters.title.principals.sql", "w")
 for value in charactersData:
-    prepareSql = "insert into characters (titleId, personId, character) values (%s, %s, \'%s\');\n" % (
-        value[0], value[1], value[2])
-    sqlFile.write(prepareSql)
+    if value[0] != 0:
+        prepareSql = "insert into characters (titleId, personId, character) values (%s, %s, \'%s\');\n" % (
+            value[0], value[1], value[2])
+        sqlFile.write(prepareSql)

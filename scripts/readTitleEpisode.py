@@ -9,6 +9,7 @@ import sys
 csv.field_size_limit(sys.maxsize)
 """titleId, parentTitleId, seasonNumber, episodeNumber"""
 titlesData = [[0, 0, 0, 0]]
+keptTitlesDataAkas = {}
 keptTitlesData = {}
 
 
@@ -16,8 +17,19 @@ with open("title.akas.tsv") as file:
     titles = csv.reader(file, delimiter="\t")
     i = 0
     for line in titles:
-        if i != 0 and line[3] == "CA" and (line[4] == "en" or line[4] == "\\N") and int(line[0][2:] not in keptTitlesData):
-            keptTitlesData[(int(line[0][2:]))] = ""
+        if i != 0 and line[3] == "CA" and (line[4] == "en" or line[4] == "\\N") and int(line[0][2:] not in keptTitlesDataAkas):
+            keptTitlesDataAkas[(int(line[0][2:]))] = ""
+        i += 1
+
+
+with open("title.basics.tsv") as file:
+    titles = csv.reader(file, delimiter="\t")
+    i = 0
+    for line in titles:
+        temp = []
+        if i != 0:
+            if (line[1] == "movie" or line[1] == "tvSeries" or line[1] == "tvEpisode") and len(line) == 9 and int(line[0][2:]) in keptTitlesDataAkas:
+                keptTitlesData[int(line[0][2:])] = ""
         i += 1
 
 
@@ -39,7 +51,8 @@ with open("title.episode.tsv") as file:
 
 sqlFile = open("title.episode.sql", "w")
 for value in titlesData:
-    preparedSql = "update media set episodeNumber=%s, seasonNumber=%s where titleid = %s;\n" % (value[3], value[2], value[0])
-    sqlFile.write(preparedSql)
-    prepareSql= "insert into have (titleidEpisode, titleidShow) values (%s, %s);\n" % (value[0], value[1])
-    sqlFile.write(prepareSql)
+    if value[0] != 0:
+        preparedSql = "update media set episodeNumber=%s, seasonNumber=%s where titleid = %s;\n" % (value[3], value[2], value[0])
+        sqlFile.write(preparedSql)
+        prepareSql= "insert into have (titleidEpisode, titleidShow) values (%s, %s);\n" % (value[0], value[1])
+        sqlFile.write(prepareSql)

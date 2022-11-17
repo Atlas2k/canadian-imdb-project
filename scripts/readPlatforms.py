@@ -16,16 +16,30 @@ import sys
 """
 csv.field_size_limit(sys.maxsize)
 """titleId, date_added"""
-keptTitlesData = {}
 sqlFile = open("availableOn.sql", "w")
+keptTitlesDataAkas = {}
+keptTitlesData = {}
+
 
 with open("title.akas.tsv") as file:
     titles = csv.reader(file, delimiter="\t")
     i = 0
     for line in titles:
-        if i != 0 and line[3] == "CA" and (line[4] == "en" or line[4] == "\\N") and int(line[0][2:]) not in keptTitlesData:
-            keptTitlesData[line[2]] = (int(line[0][2:]))
+        if i != 0 and line[3] == "CA" and (line[4] == "en" or line[4] == "\\N") and int(line[0][2:] not in keptTitlesDataAkas):
+            keptTitlesDataAkas[(int(line[0][2:]))] = ""
         i += 1
+
+
+with open("title.basics.tsv") as file:
+    titles = csv.reader(file, delimiter="\t")
+    i = 0
+    for line in titles:
+        temp = []
+        if i != 0:
+            if (line[1] == "movie" or line[1] == "tvSeries" or line[1] == "tvEpisode") and len(line) == 9 and int(line[0][2:]) in keptTitlesDataAkas:
+                keptTitlesData[line[2]] = (int(line[0][2:]))
+        i += 1
+
 
 
 def readPlatformFile(fileName, platformId):
@@ -40,9 +54,10 @@ def readPlatformFile(fileName, platformId):
             i += 1
 
     for value in foundTitles:
-        prepareSql = "insert into availableOn (platformId, titleId, dateAdded) values (%s, %s, \'%s\');\n" % (
-            platformId, value[0], value[1])
-        sqlFile.write(prepareSql)
+        if value[0] != 0:
+            prepareSql = "insert into availableOn (platformId, titleId, dateAdded) values (%s, %s, \'%s\');\n" % (
+                platformId, value[0], value[1])
+            sqlFile.write(prepareSql)
 
 
 readPlatformFile("amazon_prime_titles.csv", 2)
