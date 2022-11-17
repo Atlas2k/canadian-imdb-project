@@ -1,13 +1,11 @@
 
-build: movies.class
+buildLoader: LoadMovies.class
 
-movies.class: movies.java
-	javac movies.java
+LoadMovies.class: LoadMovies.java
+	javac LoadMovies.java
 
-run: movies.class
-	java -cp .:mssql-jdbc-11.2.0.jre18.jar movies
+runLoader: LoadMovies.class
+	java -cp .:mssql-jdbc-11.2.0.jre18.jar LoadMovies
 
-clean:
-	rm movies.class
-	rm generateSQL.class
-	rm queries.class
+cleanLoader:
+	rm LoadMovies.class

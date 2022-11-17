@@ -16,7 +16,7 @@ public class generateSQL {
 
     public generateSQL() {
         Properties prop = new Properties();
-        String fileName = "C:\\Users\\akint\\OneDrive\\Desktop\\COMP3380Proj\\Server\\src\\auth.cfg";
+        String fileName = "auth.cfg";
         try {
             FileInputStream configFile = new FileInputStream(fileName);
             prop.load(configFile);
@@ -51,10 +51,6 @@ public class generateSQL {
 
              this.statement = connection.createStatement();
             System.out.println("Exporting ....");
-            // Tables.dropTables(statement);
-            // Tables.createTables(statement);
-            loadTables();
-
         }
         catch (SQLException | IOException e) {
              e.printStackTrace();
@@ -63,7 +59,7 @@ public class generateSQL {
     }
 
     public String yourSearch(String input) throws SQLException {
-        queries query = new queries();
+        Queries query = new Queries();
         Parameters p = new Parameters();
         handleErrors(input.split(" ")[1],p);
         if(input.split(" ")[0].compareTo("a")==0){
@@ -92,42 +88,6 @@ public class generateSQL {
             }
         }
     }
-
-    public void loadTables() throws IOException, SQLException {
-        System.out.println("Loading Data From Scripts Into Server. Please Wait...");
-        System.out.println("Loading the media table...");
-        // loadData("title.akas.sql");
-        // loadData("title.basics.sql");
-        // loadData("title.ratings.sql");
-        // connection.createStatement().execute("Delete from media where titleId = 0;");
-        // connection.createStatement().execute("Delete from media where title is NULL;");
-
-        System.out.println("Loading the genres table and realtion...");
-        // loadData("genres.title.basics.sql");
-        // loadData("partOf.title.basics.sql");
-
-        System.out.println("Loading the having (episodes) table...");
-        // loadData("title.episode.sql");
-
-        // Loading the people table
-        System.out.println("Loading the people table relations...");
-        // loadData("name.basics.sql");
-        // loadData("knownFor.name.basics.sql");
-        // loadData("jobs.name.basics.sql");
-        // loadData("works.name.basics.sql");
-
-        // Loading cast and character data
-        System.out.println("Loading the cast and character tables...");
-        //        loadData("title.principals.sql");
-        //        loadData("characters.title.principals.sql");
-
-        // Loading platform data
-        System.out.println("Loading the platform table and relations...");
-        //         loadData("platform.sql");
-        //         loadData("availableOn.sql");
-    }
-
-
 
     public void loadData(String script) throws IOException, SQLException {
         BufferedReader reader = new BufferedReader(new FileReader(script));

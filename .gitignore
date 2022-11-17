@@ -1,12 +1,9 @@
 # Project exclude paths
 /out/
 auth.cfg
-Tables.class
 generateSQL.class
-src/movies.class
 src/queries.class
 src/characters.title.principals.sql
-.gitignore
 src/genres.title.basics.sql
 src/jobs.name.basics.sql
 src/knownFor.name.basics.sql
@@ -20,3 +17,5 @@ src/title.ratings.sql
 src/works.name.basics.sql
 src/platform.sql
 src/availableOn.sql
+src/LoadMovies.class
+.gitignore
