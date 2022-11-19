@@ -35,8 +35,6 @@ public class StandardIO implements Runnable {
                 System.exit(1);
             }
             myUserCommandHandler.handleUserCommand(userInput);
-            //This should not take too long, else
-            //user-interface will be non-responsive
         }
     }
 }

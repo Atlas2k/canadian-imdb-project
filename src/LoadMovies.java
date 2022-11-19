@@ -18,23 +18,20 @@ public class LoadMovies {
         String line = console.nextLine();
         String[] parts;
         LoadMovies instance = new LoadMovies();
+        instance.createConnection();
 
         while (line != null && !line.equals("q")) {
             parts = line.split("\\s+");
             if (parts[0].equals("h"))
                 printHelp();
 
-            else if (parts[0].equals("c")) {
-                instance.createConnection();
-            }
-
             else if (parts[0].equals("b")) {
-                instance.dropTables();
-                instance.createTables();
+                // instance.dropTables();
+                // instance.createTables();
             }
 
             else if (parts[0].equals("l")) {
-                instance.loadTables();
+                // instance.loadTables();
             }
 
             System.out.print("db > ");
@@ -53,7 +50,6 @@ public class LoadMovies {
         System.out.println("Movies Data Base Loader Functionality:");
         System.out.println("Commands:");
         System.out.println("h - Get help");
-        System.out.println("c Connect to the SQL server");
         System.out.println("b Build all tables onto server");
         System.out.println("l Load all .sql files onto server");
         System.out.println("");
@@ -102,40 +98,40 @@ public class LoadMovies {
     public void loadTables() {
         System.out.println("Loading Data From Scripts Into Server. Please Wait...");
         System.out.println("Loading the media table...");
-        loadFromFile("title.akas.sql");
-        loadFromFile("title.basics.sql");
-        loadFromFile("title.ratings.sql");
-        try {
-            connection.createStatement().execute("Delete from media where titleId = 0;");
-            connection.createStatement().execute("Delete from media where title is NULL;");
-        } catch (SQLException e) {
+        // loadFromFile("title.akas.sql");
+        // loadFromFile("title.basics.sql");
+        // loadFromFile("title.ratings.sql");
+        // try {
+            // connection.createStatement().execute("Delete from media where titleId = 0;");
+            // connection.createStatement().execute("Delete from media where title is NULL;");
+        // } catch (SQLException e) {
 
-            e.printStackTrace();
-        }
+        //     e.printStackTrace();
+        // }
 
         System.out.println("Loading the genres table and realtion...");
-        loadFromFile("genres.title.basics.sql");
-        loadFromFile("partOf.title.basics.sql");
+        // loadFromFile("genres.title.basics.sql");
+        // loadFromFile("partOf.title.basics.sql");
 
         System.out.println("Loading the having (episodes) table...");
-        loadFromFile("title.episode.sql");
+        // loadFromFile("title.episode.sql");
 
         // Loading the people table
         System.out.println("Loading the people table relations...");
-        loadFromFile("name.basics.sql");
-        loadFromFile("knownFor.name.basics.sql");
-        loadFromFile("jobs.name.basics.sql");
-        loadFromFile("works.name.basics.sql");
+        // loadFromFile("name.basics.sql");
+        // loadFromFile("knownFor.name.basics.sql");
+        // loadFromFile("jobs.name.basics.sql");
+        // loadFromFile("works.name.basics.sql");
 
         // Loading cast and character data
         System.out.println("Loading the cast and character tables...");
-        loadFromFile("title.principals.sql");
-        loadFromFile("characters.title.principals.sql");
+        // loadFromFile("title.principals.sql");
+        // loadFromFile("characters.title.principals.sql");
 
         // Loading platform data
         System.out.println("Loading the platform table and relations...");
-        loadFromFile("platform.sql");
-        loadFromFile("availableOn.sql");
+        // loadFromFile("platform.sql");
+        // loadFromFile("availableOn.sql");
     }
 
     public void loadFromFile(String file) {
@@ -143,7 +139,6 @@ public class LoadMovies {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line = reader.readLine();
             // assumes each query is its own line
-            System.out.println(line);
             while (line != null) {
                 this.connection.createStatement().execute(line);
                 line = reader.readLine();

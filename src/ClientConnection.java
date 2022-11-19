@@ -1,22 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author ferens
- */
 public class ClientConnection implements Runnable {
 
     InputStream input;
@@ -36,7 +24,6 @@ public class ClientConnection implements Runnable {
             input = clientSocket.getInputStream();
             output = clientSocket.getOutputStream();
         } catch (IOException ex) {
-            Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
             myServer.sendMessageToUI("Cannot create IO streams; exiting program.");
             System.exit(1);
         }
@@ -52,11 +39,13 @@ public class ClientConnection implements Runnable {
                 theString = Character.toString(msg);
                 myClientCommandHandler.handleClientCommand(this, theString);
             } catch (IOException | SQLException e) {
-                if(e.toString().contains("Connection reset"))
-                    myServer.sendMessageToUI("Connection was unexpectedly reset by remote host; stopping thread and disconnecting client: "+ clientSocket.getRemoteSocketAddress());
+                if (e.toString().contains("Connection reset"))
+                    myServer.sendMessageToUI(
+                            "Connection was unexpectedly reset by remote host; stopping thread and disconnecting client: "
+                                    + clientSocket.getRemoteSocketAddress());
                 else
-                    myServer.sendMessageToUI("Cannot read from socket; stopping thread and disconnecting client." + clientSocket.getRemoteSocketAddress() + "error message is: "+ e);
-                //disconnectClient();
+                    myServer.sendMessageToUI("Cannot read from socket; stopping thread and disconnecting client."
+                            + clientSocket.getRemoteSocketAddress() + "error message is: " + e);
                 stopThisThread = true;
             }
         }
@@ -71,31 +60,5 @@ public class ClientConnection implements Runnable {
             System.exit(0);
         } finally {
         }
-    }
-
-    public void clientQuit() {
-        disconnectClient();
-    }
-
-    public void clientDisconnect() {
-        disconnectClient();
-    }
-
-    public void disconnectClient() {
-        try {
-            stopThisThread = true;
-            clientSocket.close();
-            clientSocket = null;
-            input = null;
-            output = null;
-        } catch (IOException e) {
-            myServer.sendMessageToUI("cannot close client socket; exiting program.");
-            System.exit(0);
-        } finally {
-        }
-    }
-
-    public Socket getClientSocket() {
-        return clientSocket;
     }
 }

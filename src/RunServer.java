@@ -1,8 +1,4 @@
-/**
- *
- * @author ferens
- */
-public class ServerTest {
+public class RunServer {
 
     public static void main(String[] args) {
 
@@ -13,10 +9,6 @@ public class ServerTest {
         Thread myUIthread = new Thread(myUI);
         myUIthread.start();
         myUI.display("1:\tQuit\n"
-                + "2:\tlisten\n"
-                + "3:\tSet Port\n"
-                + "4:\tGet Port\n"
-                + "5:\tStop listening\n"
-                + "6:\tStart Server Socket\n");
+                + "2:\tStart Server and Listen");
     }
 }

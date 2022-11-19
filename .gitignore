@@ -1,8 +1,6 @@
 # Project exclude paths
 /out/
-auth.cfg
-generateSQL.class
-src/queries.class
+# .sql files
 src/characters.title.principals.sql
 src/genres.title.basics.sql
 src/jobs.name.basics.sql
@@ -17,5 +15,18 @@ src/title.ratings.sql
 src/works.name.basics.sql
 src/platform.sql
 src/availableOn.sql
+# .sql files end
+# .class files
+generateSQL.class
 src/LoadMovies.class
+src/ClientCommandHandler.class
+src/ClientConnection.class
+src/UserCommandHandler.class
+src/StandardIO.class
+src/RunServer.class
+src/Server.class
+# .class files end
+# misc
 .gitignore
+auth.cfg
+src/.vscode/settings.json
