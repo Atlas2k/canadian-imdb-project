@@ -39,7 +39,16 @@ with open("title.basics.tsv") as file:
                 temp.append(line[3].replace("'", "\""))  # title
                 temp.append(line[4])  # isAdult
                 temp.append(line[5])  # startYear
-                temp .append(line[6])  # endYear
+                # Taking care of endYear
+                if (line[1] == "movie"):
+                    temp.append("null")  # Movie
+                elif(line[1] == "tvSeries"):
+                    if (line[6] != "\\N"):
+                        temp.append(line[6]) # Show that ended
+                    else:
+                        temp.append(0) # Ongoing show
+                elif(line[1] == "tvEpisode"):
+                        temp.append(1) # Episode
                 temp.append(line[7])  # runTimeMinutes
                 for i in range(1, len(temp)):
                     if temp[i] == "\\N":

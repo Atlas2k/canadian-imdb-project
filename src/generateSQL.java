@@ -18,7 +18,7 @@ public class generateSQL {
     // Replace server name, username, and password with your credentials
     public static void main(String[] args) {
         generateSQL thisThing = new generateSQL();
-        System.out.println(thisThing.searchMovie("s boop"));
+        System.out.println(thisThing.searchShow("s the simpsons"));
 
     }
 
@@ -84,7 +84,7 @@ public class generateSQL {
             PreparedStatement searchMovie = connection.prepareStatement("SELECT * from media where title like ?;");
             searchMovie.setString(1, "%" + movieName + "%");
             ResultSet resultSet = searchMovie.executeQuery();
-            while (resultSet.next() && resultSet.getString("endYear") == null) {
+            while (resultSet.next()) {
                 if (resultSet.getString("endYear") == null) {
                     builtResult += processReturn(resultSet.getString("title")) + "\n";
                     builtResult += "Release Date: " + resultSet.getInt("startYear") + "\n";
@@ -161,8 +161,8 @@ public class generateSQL {
                             builtResult += "\n";
                         }
                     }
+                    builtResult += "------------------------------------" + "\n";
                 }
-                builtResult += "------------------------------------" + "\n";
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -184,117 +184,121 @@ public class generateSQL {
             searchShow.setString(1, "%" + showName + "%");
             ResultSet resultSet = searchShow.executeQuery();
             while (resultSet.next()) {
-                builtResult += processReturn(resultSet.getString("title")) + "\n";
-                builtResult += "Start Date: " + resultSet.getInt("startYear") + "\n";
-                if (resultSet.getInt("endYear") != 0) {
-                    builtResult += "End Date: " + resultSet.getInt("endYear") + "\n";
-                } else {
-                    builtResult += "End Date: Ongoing" + "\n";
-                }
-                if (resultSet.getBoolean("isAdult") == true) {
-                    builtResult += "Rating: Adult\n";
-                } else {
-                    builtResult += "Rating: Everyone\n";
-                }
-                builtResult += "IMDb Rating: " + resultSet.getFloat("imdbRating") + "\n";
-
-                // Adding Genre Info
-                int titleId = resultSet.getInt("titleId");
-                String sqlCommand = "select genreName from media ";
-                sqlCommand += "join partOf on media.titleId = partOf.titleId ";
-                sqlCommand += "join genre on partOf.genreId = genre.genreId ";
-                sqlCommand += "where media.titleId = ?";
-                searchShow = connection.prepareStatement(sqlCommand);
-                searchShow.setInt(1, titleId);
-                ResultSet genreResultSet = searchShow.executeQuery();
-                if (genreResultSet.next()) {
-                    builtResult += "Genre: " + genreResultSet.getString("genreName");
-                    while (genreResultSet.next()) {
-                        builtResult += ", " + genreResultSet.getString("genreName");
+                if ((resultSet.getString("endYear") == "0"
+                        || (resultSet.getString("endYear") != "1" && resultSet.getString("endYear") != null))) {
+                    builtResult += processReturn(resultSet.getString("title")) + "\n";
+                    builtResult += "Start Date: " + resultSet.getInt("startYear") + "\n";
+                    if (resultSet.getInt("endYear") != 0) {
+                        builtResult += "End Date: " + resultSet.getInt("endYear") + "\n";
+                    } else {
+                        builtResult += "End Date: Ongoing" + "\n";
                     }
-                    builtResult += "\n";
-                }
+                    if (resultSet.getBoolean("isAdult") == true) {
+                        builtResult += "Rating: Adult\n";
+                    } else {
+                        builtResult += "Rating: Everyone\n";
+                    }
+                    builtResult += "IMDb Rating: " + resultSet.getFloat("imdbRating") + "\n";
 
-                // Adding Cast and Character Information
-                sqlCommand = "select people.name, workedOn.position, characters.character from media ";
-                sqlCommand += "left join workedOn on media.titleId = workedOn.titleId ";
-                sqlCommand += "left join people on workedOn.personId = people.personId ";
-                sqlCommand += "left join characters on media.titleId = characters.titleId ";
-                sqlCommand += "and people.personId = characters.personId where media.titleId = ?";
-                searchShow = connection.prepareStatement(sqlCommand);
-                searchShow.setInt(1, titleId);
-                ResultSet castSet = searchShow.executeQuery();
-                if (castSet.next()) {
-                    builtResult += "Cast:\n";
-                    if (castSet.getString("name") != null) {
-                        builtResult += processReturn(castSet.getString("name")) + ", " + castSet.getString("position");
-                        if (castSet.getString("character") != null) {
-                            builtResult += " as " + processReturn(castSet.getString("character"));
+                    // Adding Genre Info
+                    int titleId = resultSet.getInt("titleId");
+                    String sqlCommand = "select genreName from media ";
+                    sqlCommand += "join partOf on media.titleId = partOf.titleId ";
+                    sqlCommand += "join genre on partOf.genreId = genre.genreId ";
+                    sqlCommand += "where media.titleId = ?";
+                    searchShow = connection.prepareStatement(sqlCommand);
+                    searchShow.setInt(1, titleId);
+                    ResultSet genreResultSet = searchShow.executeQuery();
+                    if (genreResultSet.next()) {
+                        builtResult += "Genre: " + genreResultSet.getString("genreName");
+                        while (genreResultSet.next()) {
+                            builtResult += ", " + genreResultSet.getString("genreName");
                         }
+                        builtResult += "\n";
                     }
-                    builtResult += "\n";
-                    while (castSet.next()) {
+
+                    // Adding Cast and Character Information
+                    sqlCommand = "select people.name, workedOn.position, characters.character from media ";
+                    sqlCommand += "left join workedOn on media.titleId = workedOn.titleId ";
+                    sqlCommand += "left join people on workedOn.personId = people.personId ";
+                    sqlCommand += "left join characters on media.titleId = characters.titleId ";
+                    sqlCommand += "and people.personId = characters.personId where media.titleId = ?";
+                    searchShow = connection.prepareStatement(sqlCommand);
+                    searchShow.setInt(1, titleId);
+                    ResultSet castSet = searchShow.executeQuery();
+                    if (castSet.next()) {
+                        builtResult += "Cast:\n";
                         if (castSet.getString("name") != null) {
                             builtResult += processReturn(castSet.getString("name")) + ", "
                                     + castSet.getString("position");
-
                             if (castSet.getString("character") != null) {
                                 builtResult += " as " + processReturn(castSet.getString("character"));
                             }
                         }
                         builtResult += "\n";
-                    }
-                }
+                        while (castSet.next()) {
+                            if (castSet.getString("name") != null) {
+                                builtResult += processReturn(castSet.getString("name")) + ", "
+                                        + castSet.getString("position");
 
-                // Adding Available On Information
-                sqlCommand = "select platform.platformName, availableOn.dateAdded from media ";
-                sqlCommand += "join availableOn on media.titleId = availableOn.titleId ";
-                sqlCommand += "join platform on availableOn.platformId = platform.platformId ";
-                sqlCommand += "where media.titleId = ?;";
-                searchShow = connection.prepareStatement(sqlCommand);
-                searchShow.setInt(1, titleId);
-                ResultSet platformSet = searchShow.executeQuery();
-                if (platformSet.next()) {
-                    builtResult += "Available On:\n";
-                    builtResult += platformSet.getString("platformName");
-                    if (platformSet.getString("dateAdded") != "") {
-                        builtResult += " since " + platformSet.getString("dateAdded");
+                                if (castSet.getString("character") != null) {
+                                    builtResult += " as " + processReturn(castSet.getString("character"));
+                                }
+                            }
+                            builtResult += "\n";
+                        }
                     }
-                    builtResult += "\n";
-                    while (platformSet.next()) {
+
+                    // Adding Available On Information
+                    sqlCommand = "select platform.platformName, availableOn.dateAdded from media ";
+                    sqlCommand += "join availableOn on media.titleId = availableOn.titleId ";
+                    sqlCommand += "join platform on availableOn.platformId = platform.platformId ";
+                    sqlCommand += "where media.titleId = ?;";
+                    searchShow = connection.prepareStatement(sqlCommand);
+                    searchShow.setInt(1, titleId);
+                    ResultSet platformSet = searchShow.executeQuery();
+                    if (platformSet.next()) {
+                        builtResult += "Available On:\n";
                         builtResult += platformSet.getString("platformName");
                         if (platformSet.getString("dateAdded") != "") {
                             builtResult += " since " + platformSet.getString("dateAdded");
                         }
                         builtResult += "\n";
+                        while (platformSet.next()) {
+                            builtResult += platformSet.getString("platformName");
+                            if (platformSet.getString("dateAdded") != "") {
+                                builtResult += " since " + platformSet.getString("dateAdded");
+                            }
+                            builtResult += "\n";
+                        }
                     }
-                }
 
-                // Adding Some Episode Information
-                sqlCommand = "select top 5 episodes.* from have ";
-                sqlCommand += "join media shows on have.titleIdShow = shows.titleId ";
-                sqlCommand += "join media episodes on have.titleIdEpisode = episodes.titleId ";
-                sqlCommand += "where shows.titleId = ? ";
-                sqlCommand += "order by imdbRating desc;";
-                searchShow = connection.prepareStatement(sqlCommand);
-                searchShow.setInt(1, titleId);
-                ResultSet episodeSet = searchShow.executeQuery();
-                if (episodeSet.next()) {
-                    builtResult += "Some Available Episodes:\n";
-                    builtResult += "Episode Name: " + processReturn(episodeSet.getString("title")) + "\n";
-                    builtResult += "Season: " + episodeSet.getInt("seasonNumber") + "\n";
-                    builtResult += "Episode: " + episodeSet.getInt("episodeNumber") + "\n";
-                    builtResult += "IMDb Rating: " + resultSet.getFloat("imdbRating") + "\n";
-                    builtResult += "--\n";
-                    while (episodeSet.next()) {
+                    // Adding Some Episode Information
+                    sqlCommand = "select top 5 episodes.* from have ";
+                    sqlCommand += "join media shows on have.titleIdShow = shows.titleId ";
+                    sqlCommand += "join media episodes on have.titleIdEpisode = episodes.titleId ";
+                    sqlCommand += "where shows.titleId = ? ";
+                    sqlCommand += "order by imdbRating desc;";
+                    searchShow = connection.prepareStatement(sqlCommand);
+                    searchShow.setInt(1, titleId);
+                    ResultSet episodeSet = searchShow.executeQuery();
+                    if (episodeSet.next()) {
+                        builtResult += "Some Available Episodes:\n";
                         builtResult += "Episode Name: " + processReturn(episodeSet.getString("title")) + "\n";
                         builtResult += "Season: " + episodeSet.getInt("seasonNumber") + "\n";
                         builtResult += "Episode: " + episodeSet.getInt("episodeNumber") + "\n";
                         builtResult += "IMDb Rating: " + resultSet.getFloat("imdbRating") + "\n";
                         builtResult += "--\n";
+                        while (episodeSet.next()) {
+                            builtResult += "Episode Name: " + processReturn(episodeSet.getString("title")) + "\n";
+                            builtResult += "Season: " + episodeSet.getInt("seasonNumber") + "\n";
+                            builtResult += "Episode: " + episodeSet.getInt("episodeNumber") + "\n";
+                            builtResult += "IMDb Rating: " + resultSet.getFloat("imdbRating") + "\n";
+                            builtResult += "--\n";
+                        }
                     }
+                    builtResult += "------------------------------------" + "\n";
                 }
-                builtResult += "------------------------------------" + "\n";
             }
         } catch (SQLException e) {
             e.printStackTrace();
