@@ -1,14 +1,14 @@
 
-buildLoader: LoadMovies.class
+buildLoader: LoadDatabase.class
 
-LoadMovies.class: LoadMovies.java
-	javac LoadMovies.java
+LoadMovies.class: LoadDatabase.java
+	javac LoadDatabase.java
 
-runLoader: LoadMovies.class
-	java -cp .:mssql-jdbc-11.2.0.jre18.jar LoadMovies
+runLoader: LoadDatabase.class
+	java -cp .:mssql-jdbc-11.2.0.jre18.jar LoadDatabase
 
 cleanLoader:
-	rm LoadMovies.class
+	rm LoadDatabase.class
 
 buildServer: RunServer.class
 
@@ -19,3 +19,9 @@ runServer: RunServer.class
 	java -cp .:mssql-jdbc-11.2.0.jre18.jar RunServer
 
 cleanServer:
+	rm generateSQL.class
+	rm ClientCommandHandler.class
+	rm ClientConnection.class
+	rm RunServer.class
+	rm Server.class
+	rm StandardIO.class

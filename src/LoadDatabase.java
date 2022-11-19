@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.Properties;
 
-public class LoadMovies {
+public class LoadDatabase {
 
     Statement statement;
     Connection connection;
@@ -17,7 +17,7 @@ public class LoadMovies {
         System.out.print("db > ");
         String line = console.nextLine();
         String[] parts;
-        LoadMovies instance = new LoadMovies();
+        LoadDatabase instance = new LoadDatabase();
         instance.createConnection();
 
         while (line != null && !line.equals("q")) {
@@ -41,7 +41,7 @@ public class LoadMovies {
         console.close();
     }
 
-    public LoadMovies() {
+    public LoadDatabase() {
         statement = null;
         connection = null;
     }
@@ -132,6 +132,7 @@ public class LoadMovies {
         System.out.println("Loading the platform table and relations...");
         // loadFromFile("platform.sql");
         // loadFromFile("availableOn.sql");
+        // connection.createStatement().execute("Delete from media where title is NULL;");
     }
 
     public void loadFromFile(String file) {
