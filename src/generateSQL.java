@@ -16,7 +16,7 @@ public class generateSQL {
     // Replace server name, username, and password with your credentials
     public static void main(String[] args) {
         generateSQL thisThing = new generateSQL();
-        System.out.println(thisThing.searchEpisode("s Look where you want to go"));
+        System.out.println(thisThing.searchPerson("s Seth Rogen"));
 
     }
 
@@ -62,6 +62,11 @@ public class generateSQL {
     public String processCommand(String clientCommand) {
         String preparedString = clientCommand.trim();
         preparedString = preparedString.replace("'", "\"");
+        return preparedString;
+    }
+
+    public String processJobReturn(String returnValue) {
+        String preparedString = returnValue.replace("_", " ");
         return preparedString;
     }
 
@@ -180,8 +185,8 @@ public class generateSQL {
             searchShow.setString(1, "%" + showName + "%");
             ResultSet resultSet = searchShow.executeQuery();
             while (resultSet.next()) {
-                if ((resultSet.getString("endYear") == "0"
-                        || (resultSet.getString("endYear") != "1" && resultSet.getString("endYear") != null))) {
+                if ((resultSet.getInt("endYear") == 0
+                        || (resultSet.getInt("endYear") != 1 && resultSet.getString("endYear") != null))) {
                     builtResult += processReturn(resultSet.getString("title")) + "\n";
                     builtResult += "Start Date: " + resultSet.getInt("startYear") + "\n";
                     if (resultSet.getInt("endYear") != 0) {
@@ -318,6 +323,8 @@ public class generateSQL {
             while (resultSet.next()) {
                 if (resultSet.getInt("endYear") == 1) {
                     builtResult += processReturn(resultSet.getString("title")) + "\n";
+
+                    // Getting parent show information if available
                     int titleId = resultSet.getInt("titleId");
                     String sqlCommand = "select show.title, show.titleId from have ";
                     sqlCommand += "join media show on show.titleId = have.titleIdShow ";
@@ -421,6 +428,80 @@ public class generateSQL {
             builtResult += "No Result Found!\n";
         }
         return builtResult;
+    }
+
+    public String searchPerson(String clientCommand) {
+        String builtResult = "People in the Motion Picture Industry matching the name " + clientCommand.split(" ", 2)[1]
+                + ":\n";
+        int originalLength = builtResult.length();
+        clientCommand = processCommand(clientCommand);
+        String personName = clientCommand.split(" ", 2)[1];
+        try {
+            PreparedStatement searchPerson = connection.prepareStatement("SELECT * from people where name like ?;");
+            searchPerson.setString(1, "%" + personName + "%");
+            ResultSet resultSet = searchPerson.executeQuery();
+            while (resultSet.next()) {
+                builtResult += processReturn(resultSet.getString("name")) + "\n";
+                if (resultSet.getInt("dateOfBirth") != 0) {
+                    builtResult += "Year of birth: " + resultSet.getInt("dateOfBirth") + "\n";
+                } else {
+                    builtResult += "Year of birth: Unknown\n";
+                }
+                if (resultSet.getInt("dateOfPassing") != 0) {
+                    builtResult += "Year of passing: " + resultSet.getInt("dateOfPassing") + "\n";
+                }
+                int personId = resultSet.getInt("personId");
+
+                // Get Job
+                String sqlCommand = "select jobs.jobName from works ";
+                sqlCommand += "join jobs on jobs.jobId = works.jobId ";
+                sqlCommand += "join people on people.personId = works.personId ";
+                sqlCommand += "where people.personId = ?;";
+                searchPerson = connection.prepareStatement(sqlCommand);
+                searchPerson.setInt(1, personId);
+                ResultSet jobsSet = searchPerson.executeQuery();
+                if (jobsSet.next()) {
+                    if (!jobsSet.getString("jobName").equals("null")) {
+                        builtResult += "Jobs: " + processJobReturn(jobsSet.getString("jobName"));
+                    }
+                    while (jobsSet.next()) {
+                        if (!jobsSet.getString("jobName").equals("null")) {
+                            builtResult += ", " + processJobReturn(jobsSet.getString("jobName"));
+                        }
+                    }
+                    builtResult += "\n";
+                }
+
+                // Known for information
+                sqlCommand = "select media.title, workedOn.position, characters.character from knownFor ";
+                sqlCommand += "join media on media.titleId = knownFor.titleId ";
+                sqlCommand += "join people on people.personId = knownFor.personId ";
+                sqlCommand += "join workedOn on workedOn.titleId = media.titleId ";
+                sqlCommand += "and workedOn.personId = people.personId ";
+                sqlCommand += "left join characters on media.titleId = characters.titleId ";
+                sqlCommand += "and people.personId = characters.personId ";
+                sqlCommand += "where people.personId = ?;";
+                searchPerson = connection.prepareStatement(sqlCommand);
+                searchPerson.setInt(1, personId);
+                ResultSet knownForSet = searchPerson.executeQuery();
+                if (knownForSet.next()) {
+                    builtResult += "Known for: " + processReturn(knownForSet.getString("title") + ", " + knownForSet.getString("position"));
+                    if (knownForSet.getString("character") != null) {
+                        builtResult += " as " + knownForSet.getString("character");
+                    }
+                    builtResult += "\n";
+                }
+                builtResult += "------------------------------------" + "\n";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (builtResult.length() == originalLength) {
+            builtResult += "No Result Found!\n";
+        }
+        return builtResult;
 
     }
+
 }
