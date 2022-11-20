@@ -16,7 +16,7 @@ public class generateSQL {
     // Replace server name, username, and password with your credentials
     public static void main(String[] args) {
         generateSQL thisThing = new generateSQL();
-        System.out.println(thisThing.allPeoplePlayingACharacter("s "));
+        System.out.println(thisThing.availableOnSet("s "));
 
     }
 
@@ -623,6 +623,62 @@ public class generateSQL {
                         builtResult += "show ";
                     } else {
                         builtResult += "movie ";
+                    }
+                    builtResult += processReturn(resultSet.getString("title")) + "\n";
+                }
+                if (builtResult.length() == originalLength) {
+                    builtResult += "No Result Found!\n";
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (builtResult.length() == originalLength) {
+                builtResult += "No Result Found!\n";
+            }
+
+        } else {
+            builtResult = "Cannot return result for empty string!\n";
+        }
+        return builtResult;
+
+    }
+
+    public String availableOnSet(String clientCommand) {
+        String builtResult = "";
+        if (clientCommand.trim().split(" ", 2).length > 1) {
+            builtResult = "All media avialable on all of "
+                    + clientCommand.split(" ", 2)[1]
+                    + ":\n";
+            int originalLength = builtResult.length();
+            clientCommand = processCommand(clientCommand);
+            String platforms = clientCommand.split(" ", 2)[1];
+            String[] platformList = platforms.split(",");
+            try {
+
+                String sqlCommand = "with showOnPlatform as ( ";
+                sqlCommand += "select media.titleId, platform.platformName from availableOn ";
+                sqlCommand += "join media on media.titleId = availableOn.titleId ";
+                sqlCommand += "join platform on platform.platformId = availableOn.platformId) ";
+                sqlCommand += "select title, endYear from media where titleId in ( ";
+                sqlCommand += "select titleId from showOnPlatform ";
+                sqlCommand += "where platformName like ? intersect ";
+                sqlCommand += "select titleId from showOnPlatform ";
+                sqlCommand += "where platformName like ? intersect ";
+                sqlCommand += "select titleId from showOnPlatform ";
+                sqlCommand += "where platformName like ? intersect ";
+                sqlCommand += "select titleId from showOnPlatform ";
+                sqlCommand += "where platformName like ?);";
+                PreparedStatement searchPlatforms = connection.prepareStatement(sqlCommand);
+                for (int i = 1; i <= 4; i++) {
+                    searchPlatforms.setString(i, platformList[(i - 1) % platformList.length].trim());
+                }
+                ResultSet resultSet = searchPlatforms.executeQuery();
+                while (resultSet.next()) {
+                    if (resultSet.getString("endYear") != null) {
+                        builtResult += "The show ";
+                    } else {
+                        builtResult += "The movie ";
                     }
                     builtResult += processReturn(resultSet.getString("title")) + "\n";
                 }

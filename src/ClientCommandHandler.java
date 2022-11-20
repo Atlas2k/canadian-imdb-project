@@ -41,6 +41,9 @@ public class ClientCommandHandler {
         } else if (instruction.equals("c")) { // All people who played a character
             String data = generateSQL.allPeoplePlayingACharacter(recievedCommand);
             sendData(data, myClientConnection);
+        } else if (instruction.equals("p")) { // Media available on a set of platforms
+            String data = generateSQL.availableOnSet(recievedCommand);
+            sendData(data, myClientConnection);
         }
     }
 
