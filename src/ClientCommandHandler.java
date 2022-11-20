@@ -47,6 +47,9 @@ public class ClientCommandHandler {
         } else if (instruction.equals("d")) { // Media by a person on a platform
             String data = generateSQL.mediaByPersonAndPlatform(recievedCommand);
             sendData(data, myClientConnection);
+        } else if (instruction.equals("r")) { // Reccomend media by genre and platform
+            String data = generateSQL.recommendByGenreAndPlatform(recievedCommand);
+            sendData(data, myClientConnection);
         }
     }
 

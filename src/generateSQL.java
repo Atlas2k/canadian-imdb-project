@@ -16,7 +16,7 @@ public class generateSQL {
     // Replace server name, username, and password with your credentials
     public static void main(String[] args) {
         generateSQL thisThing = new generateSQL();
-        System.out.println(thisThing.mediaByPersonAndPlatform("s Tom Cruise, Netflix"));
+        System.out.println(thisThing.recommendByGenreAndPlatform("s comedy, Netflix"));
 
     }
 
@@ -174,7 +174,6 @@ public class generateSQL {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         } else {
             builtResult = "Cannot return result for empty string!\n";
         }
@@ -312,7 +311,6 @@ public class generateSQL {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
             if (builtResult.length() == originalLength) {
                 builtResult += "No Result Found!\n";
             }
@@ -521,12 +519,10 @@ public class generateSQL {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         } else {
             builtResult = "Cannot return result for empty string!\n";
         }
         return builtResult;
-
     }
 
     public String allMediaForPerson(String clientCommand) {
@@ -588,16 +584,13 @@ public class generateSQL {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
             if (builtResult.length() == originalLength) {
                 builtResult += "No Result Found!\n";
             }
-
         } else {
             builtResult = "Cannot return result for empty string!\n";
         }
         return builtResult;
-
     }
 
     public String allPeoplePlayingACharacter(String clientCommand) {
@@ -632,16 +625,13 @@ public class generateSQL {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
             if (builtResult.length() == originalLength) {
                 builtResult += "No Result Found!\n";
             }
-
         } else {
             builtResult = "Cannot return result for empty string!\n";
         }
         return builtResult;
-
     }
 
     public String availableOnSet(String clientCommand) {
@@ -687,16 +677,13 @@ public class generateSQL {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
             if (builtResult.length() == originalLength) {
                 builtResult += "No Result Found!\n";
             }
-
         } else {
             builtResult = "Cannot return result for empty string!\n";
         }
         return builtResult;
-
     }
 
     public String mediaByPersonAndPlatform(String clientCommand) {
@@ -733,15 +720,56 @@ public class generateSQL {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
             if (builtResult.length() == originalLength) {
                 builtResult += "No Result Found!\n";
             }
-
         } else {
             builtResult = "Cannot return result for empty string!\n";
         }
         return builtResult;
+    }
 
+    public String recommendByGenreAndPlatform(String clientCommand) {
+        String builtResult = "";
+        if (clientCommand.trim().split(" ", 2).length > 1) {
+            String genreAndPlatform = clientCommand.split(" ", 2)[1];
+            String[] genreAndPlatformList = genreAndPlatform.split(",");
+            builtResult = "Recommendation for " + genreAndPlatformList[0].trim()
+                    + " media on " + genreAndPlatformList[1].trim() + ":\n";
+            int originalLength = builtResult.length();
+            try {
+                String sqlCommand = "select top 10 title, endYear, imdbRating from media ";
+                sqlCommand += "join partOf on partOf.titleId = media.titleId ";
+                sqlCommand += "join genre on genre.genreId = partOf.genreId ";
+                sqlCommand += "join availableOn on media.titleId = availableOn.titleId ";
+                sqlCommand += "join platform on availableOn.platformId = platform.platformId ";
+                sqlCommand += "where genreName like ? and platformName like ? ";
+                sqlCommand += "order by imdbRating desc;";
+                PreparedStatement searchPlatforms = connection.prepareStatement(sqlCommand);
+                searchPlatforms.setString(1, genreAndPlatformList[0].trim());
+                searchPlatforms.setString(2, genreAndPlatformList[1].trim());
+                ResultSet resultSet = searchPlatforms.executeQuery();
+                while (resultSet.next()) {
+                    if (resultSet.getString("endYear") != null) {
+                        builtResult += "The show ";
+                    } else {
+                        builtResult += "The movie ";
+                    }
+                    builtResult += processReturn(resultSet.getString("title")) + " with an IMDb rating of "
+                            + resultSet.getFloat("imdbRating") + "\n";
+                }
+                if (builtResult.length() == originalLength) {
+                    builtResult += "No Result Found!\n";
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (builtResult.length() == originalLength) {
+                builtResult += "No Result Found!\n";
+            }
+        } else {
+            builtResult = "Cannot return result for empty string!\n";
+        }
+        return builtResult;
     }
 }
