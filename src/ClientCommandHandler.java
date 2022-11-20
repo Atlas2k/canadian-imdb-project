@@ -44,6 +44,9 @@ public class ClientCommandHandler {
         } else if (instruction.equals("p")) { // Media available on a set of platforms
             String data = generateSQL.availableOnSet(recievedCommand);
             sendData(data, myClientConnection);
+        } else if (instruction.equals("d")) { // Media by a person on a platform
+            String data = generateSQL.mediaByPersonAndPlatform(recievedCommand);
+            sendData(data, myClientConnection);
         }
     }
 

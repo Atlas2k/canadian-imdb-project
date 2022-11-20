@@ -16,7 +16,7 @@ public class generateSQL {
     // Replace server name, username, and password with your credentials
     public static void main(String[] args) {
         generateSQL thisThing = new generateSQL();
-        System.out.println(thisThing.availableOnSet("s "));
+        System.out.println(thisThing.mediaByPersonAndPlatform("s Tom Cruise, Netflix"));
 
     }
 
@@ -79,7 +79,7 @@ public class generateSQL {
     public String searchMovie(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
-            builtResult = "Movies matching the name " + clientCommand.split(" ", 2)[1] + ":\n";
+            builtResult = "Movies matching the name " + clientCommand.split(" ", 2)[1].trim() + ":\n";
             int originalLength = builtResult.length();
             clientCommand = processCommand(clientCommand);
             String movieName = clientCommand.split(" ", 2)[1];
@@ -184,7 +184,7 @@ public class generateSQL {
     public String searchShow(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
-            builtResult = "Shows matching the name " + clientCommand.split(" ", 2)[1] + ":\n";
+            builtResult = "Shows matching the name " + clientCommand.split(" ", 2)[1].trim() + ":\n";
             int originalLength = builtResult.length();
             clientCommand = processCommand(clientCommand);
             String showName = clientCommand.split(" ", 2)[1];
@@ -325,7 +325,7 @@ public class generateSQL {
     public String searchEpisode(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
-            builtResult = "Episodes matching the name " + clientCommand.split(" ", 2)[1] + ":\n";
+            builtResult = "Episodes matching the name " + clientCommand.split(" ", 2)[1].trim() + ":\n";
             int originalLength = builtResult.length();
             clientCommand = processCommand(clientCommand);
             String episodeName = clientCommand.split(" ", 2)[1];
@@ -451,7 +451,7 @@ public class generateSQL {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
             builtResult = "People in the Motion Picture Industry matching the name "
-                    + clientCommand.split(" ", 2)[1]
+                    + clientCommand.split(" ", 2)[1].trim()
                     + ":\n";
             int originalLength = builtResult.length();
             clientCommand = processCommand(clientCommand);
@@ -533,7 +533,7 @@ public class generateSQL {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
             builtResult = "All media worked on by people matching the name "
-                    + clientCommand.split(" ", 2)[1]
+                    + clientCommand.split(" ", 2)[1].trim()
                     + ":\n";
             int originalLength = builtResult.length();
             clientCommand = processCommand(clientCommand);
@@ -604,7 +604,7 @@ public class generateSQL {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
             builtResult = "All people who acted as a character called "
-                    + clientCommand.split(" ", 2)[1]
+                    + clientCommand.split(" ", 2)[1].trim()
                     + ":\n";
             int originalLength = builtResult.length();
             clientCommand = processCommand(clientCommand);
@@ -655,7 +655,6 @@ public class generateSQL {
             String platforms = clientCommand.split(" ", 2)[1];
             String[] platformList = platforms.split(",");
             try {
-
                 String sqlCommand = "with showOnPlatform as ( ";
                 sqlCommand += "select media.titleId, platform.platformName from availableOn ";
                 sqlCommand += "join media on media.titleId = availableOn.titleId ";
@@ -700,4 +699,49 @@ public class generateSQL {
 
     }
 
+    public String mediaByPersonAndPlatform(String clientCommand) {
+        String builtResult = "";
+        if (clientCommand.trim().split(" ", 2).length > 1) {
+            String personAndPlatform = clientCommand.split(" ", 2)[1];
+            String[] personAndPlatformList = personAndPlatform.split(",");
+            builtResult = "All media by " + personAndPlatformList[0].trim()
+                    + " on " + personAndPlatformList[1].trim() + ":\n";
+            int originalLength = builtResult.length();
+            personAndPlatformList[0] = processCommand(personAndPlatformList[0]);
+            try {
+                String sqlCommand = "select title, endYear from workedOn  ";
+                sqlCommand += "join media on workedOn.titleId = media.titleId ";
+                sqlCommand += "join people on workedOn.personId = people.personId ";
+                sqlCommand += "join availableOn on media.titleId = availableOn.titleId ";
+                sqlCommand += "join platform on availableOn.platformId = platform.platformId ";
+                sqlCommand += "where people.name like ? and platform.platformName like ?; ";
+                PreparedStatement searchPlatforms = connection.prepareStatement(sqlCommand);
+                searchPlatforms.setString(1, personAndPlatformList[0].trim());
+                searchPlatforms.setString(2, personAndPlatformList[1].trim());
+                ResultSet resultSet = searchPlatforms.executeQuery();
+                while (resultSet.next()) {
+                    if (resultSet.getString("endYear") != null) {
+                        builtResult += "The show ";
+                    } else {
+                        builtResult += "The movie ";
+                    }
+                    builtResult += processReturn(resultSet.getString("title")) + "\n";
+                }
+                if (builtResult.length() == originalLength) {
+                    builtResult += "No Result Found!\n";
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (builtResult.length() == originalLength) {
+                builtResult += "No Result Found!\n";
+            }
+
+        } else {
+            builtResult = "Cannot return result for empty string!\n";
+        }
+        return builtResult;
+
+    }
 }
