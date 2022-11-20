@@ -29,6 +29,9 @@ public class ClientCommandHandler {
         } else if (instruction.equals("s")) { // Search for a show
             String data = generateSQL.searchShow(recievedCommand);
             sendData(data, myClientConnection);
+        } else if (instruction.equals("e")) { // Search for a show
+            String data = generateSQL.searchEpisode(recievedCommand);
+            sendData(data, myClientConnection);
         }
     }
 
