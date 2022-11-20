@@ -16,7 +16,7 @@ public class generateSQL {
     // Replace server name, username, and password with your credentials
     public static void main(String[] args) {
         generateSQL thisThing = new generateSQL();
-        System.out.println(thisThing.recommendByGenreAndPlatform("s comedy, Netflix"));
+        System.out.println(thisThing.availableOnSet("s tlskdfkdfj, saldkfj, lskdjf, saldfkj, salkdfj"));
 
     }
 
@@ -175,7 +175,7 @@ public class generateSQL {
                 e.printStackTrace();
             }
         } else {
-            builtResult = "Cannot return result for empty string!\n";
+            builtResult = "Cannot return result for empty command!\n";
         }
         return builtResult;
     }
@@ -315,7 +315,7 @@ public class generateSQL {
                 builtResult += "No Result Found!\n";
             }
         } else {
-            builtResult = "Cannot return result for empty string!\n";
+            builtResult = "Cannot return result for empty command!\n";
         }
         return builtResult;
     }
@@ -440,7 +440,7 @@ public class generateSQL {
                 e.printStackTrace();
             }
         } else {
-            builtResult = "Cannot return result for empty string!\n";
+            builtResult = "Cannot return result for empty command!\n";
         }
         return builtResult;
     }
@@ -520,7 +520,7 @@ public class generateSQL {
                 e.printStackTrace();
             }
         } else {
-            builtResult = "Cannot return result for empty string!\n";
+            builtResult = "Cannot return result for empty command!\n";
         }
         return builtResult;
     }
@@ -588,7 +588,7 @@ public class generateSQL {
                 builtResult += "No Result Found!\n";
             }
         } else {
-            builtResult = "Cannot return result for empty string!\n";
+            builtResult = "Cannot return result for empty command!\n";
         }
         return builtResult;
     }
@@ -629,7 +629,7 @@ public class generateSQL {
                 builtResult += "No Result Found!\n";
             }
         } else {
-            builtResult = "Cannot return result for empty string!\n";
+            builtResult = "Cannot return result for empty command!\n";
         }
         return builtResult;
     }
@@ -681,14 +681,15 @@ public class generateSQL {
                 builtResult += "No Result Found!\n";
             }
         } else {
-            builtResult = "Cannot return result for empty string!\n";
+            builtResult = "Cannot return result for empty command!\n";
         }
         return builtResult;
     }
 
     public String mediaByPersonAndPlatform(String clientCommand) {
         String builtResult = "";
-        if (clientCommand.trim().split(" ", 2).length > 1) {
+        if (clientCommand.trim().split(" ", 2).length > 1
+                && clientCommand.trim().split(" ", 2)[1].split(",").length == 2) {
             String personAndPlatform = clientCommand.split(" ", 2)[1];
             String[] personAndPlatformList = personAndPlatform.split(",");
             builtResult = "All media by " + personAndPlatformList[0].trim()
@@ -724,14 +725,15 @@ public class generateSQL {
                 builtResult += "No Result Found!\n";
             }
         } else {
-            builtResult = "Cannot return result for empty string!\n";
+            builtResult = "Cannot return result for invalid command!\n";
         }
         return builtResult;
     }
 
     public String recommendByGenreAndPlatform(String clientCommand) {
         String builtResult = "";
-        if (clientCommand.trim().split(" ", 2).length > 1) {
+        if (clientCommand.trim().split(" ", 2).length > 1
+                && clientCommand.trim().split(" ", 2)[1].split(",").length == 2) {
             String genreAndPlatform = clientCommand.split(" ", 2)[1];
             String[] genreAndPlatformList = genreAndPlatform.split(",");
             builtResult = "Recommendation for " + genreAndPlatformList[0].trim()
@@ -768,7 +770,7 @@ public class generateSQL {
                 builtResult += "No Result Found!\n";
             }
         } else {
-            builtResult = "Cannot return result for empty string!\n";
+            builtResult = "Cannot return result for invalid command!\n";
         }
         return builtResult;
     }
