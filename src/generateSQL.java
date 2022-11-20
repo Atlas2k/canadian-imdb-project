@@ -16,7 +16,7 @@ public class generateSQL {
     // Replace server name, username, and password with your credentials
     public static void main(String[] args) {
         generateSQL thisThing = new generateSQL();
-        System.out.println(thisThing.allMediaForPerson("s Seth Rogen"));
+        System.out.println(thisThing.allPeoplePlayingACharacter("s "));
 
     }
 
@@ -509,7 +509,7 @@ public class generateSQL {
                                 + processReturn(
                                         knownForSet.getString("title") + ", " + knownForSet.getString("position"));
                         if (knownForSet.getString("character") != null) {
-                            builtResult += " as " + knownForSet.getString("character");
+                            builtResult += " as " + processReturn(knownForSet.getString("character"));
                         }
                         builtResult += "\n";
                     }
@@ -576,11 +576,55 @@ public class generateSQL {
                         }
                         builtResult += ", " + mediaSet.getString("position");
                         if (mediaSet.getString("character") != null) {
-                            builtResult += " as " + mediaSet.getString("character");
+                            builtResult += " as " + processReturn(mediaSet.getString("character"));
                         }
                         builtResult += "\n";
                     }
                     builtResult += "------------------------------------" + "\n";
+                }
+                if (builtResult.length() == originalLength) {
+                    builtResult += "No Result Found!\n";
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (builtResult.length() == originalLength) {
+                builtResult += "No Result Found!\n";
+            }
+
+        } else {
+            builtResult = "Cannot return result for empty string!\n";
+        }
+        return builtResult;
+
+    }
+
+    public String allPeoplePlayingACharacter(String clientCommand) {
+        String builtResult = "";
+        if (clientCommand.trim().split(" ", 2).length > 1) {
+            builtResult = "All people who acted as a character called "
+                    + clientCommand.split(" ", 2)[1]
+                    + ":\n";
+            int originalLength = builtResult.length();
+            clientCommand = processCommand(clientCommand);
+            String characterName = clientCommand.split(" ", 2)[1];
+            try {
+                String sqlCommand = "select media.endYear, media.title, people.name, characters.character from characters ";
+                sqlCommand += "join media on characters.titleId = media.titleId ";
+                sqlCommand += "join people on characters.personId = people.personId ";
+                sqlCommand += "where character like ? and (media.endYear != 1 or media.endYear is null); ";
+                PreparedStatement searchCharacter = connection.prepareStatement(sqlCommand);
+                searchCharacter.setString(1, characterName);
+                ResultSet resultSet = searchCharacter.executeQuery();
+                while (resultSet.next()) {
+                    builtResult += processReturn(resultSet.getString("name")) + " in the ";
+                    if (resultSet.getString("endYear") != null) {
+                        builtResult += "show ";
+                    } else {
+                        builtResult += "movie ";
+                    }
+                    builtResult += processReturn(resultSet.getString("title")) + "\n";
                 }
                 if (builtResult.length() == originalLength) {
                     builtResult += "No Result Found!\n";

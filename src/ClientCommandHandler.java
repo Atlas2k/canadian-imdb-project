@@ -38,6 +38,9 @@ public class ClientCommandHandler {
         } else if (instruction.equals("b")) { // All media by a person
             String data = generateSQL.allMediaForPerson(recievedCommand);
             sendData(data, myClientConnection);
+        } else if (instruction.equals("c")) { // All people who played a character
+            String data = generateSQL.allPeoplePlayingACharacter(recievedCommand);
+            sendData(data, myClientConnection);
         }
     }
 
