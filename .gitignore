@@ -25,6 +25,7 @@ src/UserCommandHandler.class
 src/StandardIO.class
 src/RunServer.class
 src/Server.class
+src/LoadDatabase.class
 # .class files end
 # misc
 .gitignore

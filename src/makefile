@@ -1,7 +1,7 @@
 
 buildLoader: LoadDatabase.class
 
-LoadMovies.class: LoadDatabase.java
+LoadDatabase.class: LoadDatabase.java
 	javac LoadDatabase.java
 
 runLoader: LoadDatabase.class
@@ -22,6 +22,7 @@ cleanServer:
 	rm generateSQL.class
 	rm ClientCommandHandler.class
 	rm ClientConnection.class
+	rm UserCommandHandler.class
 	rm RunServer.class
 	rm Server.class
 	rm StandardIO.class
