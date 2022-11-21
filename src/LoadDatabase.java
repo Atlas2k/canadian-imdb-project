@@ -117,7 +117,7 @@ public class LoadDatabase {
         loadFromFile("title.episode.sql");
 
         // Loading the people table
-        System.out.println("Loading the people table relations...");
+        System.out.println("Loading the people table and relations...");
         loadFromFile("name.basics.sql");
         loadFromFile("knownFor.name.basics.sql");
         loadFromFile("jobs.name.basics.sql");

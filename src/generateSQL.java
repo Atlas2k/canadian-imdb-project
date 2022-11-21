@@ -14,11 +14,6 @@ public class generateSQL {
 
     // Connect to your database.
     // Replace server name, username, and password with your credentials
-    public static void main(String[] args) {
-        generateSQL thisThing = new generateSQL();
-        System.out.println(thisThing.availableOnSet("s tlskdfkdfj, saldkfj, lskdjf, saldfkj, salkdfj"));
-
-    }
 
     public generateSQL() {
         Properties prop = new Properties();
