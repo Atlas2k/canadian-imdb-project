@@ -17,6 +17,7 @@ public class ClientCommandHandler {
             recievedCommand += theCommand;
         } else {
             instructionHandler(myClientConnection, recievedCommand);
+            this.recievedCommand = "";
         }
 
     }
