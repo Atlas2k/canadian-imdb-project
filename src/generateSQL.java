@@ -14,6 +14,10 @@ public class generateSQL {
 
     // Connect to your database.
     // Replace server name, username, and password with your credentials
+    public static void main(String[] args) {
+        generateSQL thisthing = new generateSQL();
+        System.out.println(thisthing.searchShow("s Schitt's Creek"));
+    }
 
     public generateSQL() {
         Properties prop = new Properties();
@@ -299,6 +303,17 @@ public class generateSQL {
                                 builtResult += "IMDb Rating: " + resultSet.getFloat("imdbRating") + "\n";
                                 builtResult += "--\n";
                             }
+                        }
+                        // Get episode count
+                        sqlCommand = sqlCommand.replace("top 5 episodes.*",
+                                "count(episodes.titleId) as episodeCount");
+                        sqlCommand = sqlCommand.replace("order by imdbRating desc;", "group by shows.titleId;");
+                        searchShow = connection.prepareStatement(sqlCommand);
+                        searchShow.setInt(1, titleId);
+                        episodeSet = searchShow.executeQuery();
+                        if (episodeSet.next()) {
+                            builtResult += "The total episode count for this show on Canadian IMDb is: "
+                                    + episodeSet.getInt("episodeCount") + "\n";
                         }
                         builtResult += "------------------------------------" + "\n";
                     }
@@ -665,6 +680,17 @@ public class generateSQL {
                         builtResult += "The movie ";
                     }
                     builtResult += processReturn(resultSet.getString("title")) + "\n";
+                }
+                // Count number of titles in the set
+                sqlCommand = sqlCommand.replace("title, endYear", " count(titleId) as titleCount ");
+                searchPlatforms = connection.prepareStatement(sqlCommand);
+                for (int i = 1; i <= 4; i++) {
+                    searchPlatforms.setString(i, platformList[(i - 1) % platformList.length].trim());
+                }
+                resultSet = searchPlatforms.executeQuery();
+                if (resultSet.next()) {
+                    builtResult += "----\n" + "Total title count in this set of platforms is: "
+                            + resultSet.getString("titleCount") + "\n";
                 }
                 if (builtResult.length() == originalLength) {
                     builtResult += "No Result Found!\n";
