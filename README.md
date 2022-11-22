@@ -3,6 +3,7 @@
 * Change auth.cfg to contain your server login credentials.
 * In the movies/src directory run the command "make buildLoader" to build the loader.
 * In the movies/src directory run the command "make runLoader" to run the loader program.
+* * Very IMPORTANT Note: If running on windows, change .:mssql-jdbc-11.2.0.jre18.jar to .;mssql-jdbc-11.2.0.jre18.jar instead.
 * Press h for a help menu or simply press b to build the tables then l to begin loading.
 * * Note: This will take a while :(
 * After this process concludes your server has been loaded with all the data required to use the program.
