@@ -16,13 +16,8 @@
 * In the movies directory run the command "make runServer" to run the server program.
 * Press 2 to start the server and listen for a client connection from the Android frontend.
 
-# Starting and Connecting the Client to Server
-## 
-
-
-
-
-
+# Incase the front end does not work (Nuclear Option, please try to contact us if it has to come to this)
+* You are able to call each of the functions in generateSQL in the commented main function in that file. Simply run javac generateSQL.java, then java java -cp .:mssql-jdbc-11.2.0.jre18.jar generateSQL to be able to run this class and run the main function to get responses from the server printed onto the command prompt. Also note the format of input to each of the functions is in a comment atop each function.
 
 # Important Notes
 * The makefile assumes you are running Java JRE 18 as that is the class path that is in both run commands. The file for JRE 11 is provided if need be, feel free to update the makefile to use that .jar file if an older version of the JRE is being run on your machine. It is also assumed that make is installed on the user's machine.

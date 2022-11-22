@@ -14,10 +14,10 @@ public class generateSQL {
 
     // Connect to your database.
     // Replace server name, username, and password with your credentials
-    public static void main(String[] args) {
-        generateSQL thisthing = new generateSQL();
-        System.out.println(thisthing.searchShow("s Schitt's Creek"));
-    }
+    // public static void main(String[] args) {
+    //     generateSQL thisthing = new generateSQL();
+    //     System.out.println(thisthing.searchShow("s Schitt's Creek"));
+    // }
 
     public generateSQL() {
         Properties prop = new Properties();
@@ -75,6 +75,7 @@ public class generateSQL {
         return preparedString;
     }
 
+    // m moviename
     public String searchMovie(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
@@ -179,6 +180,7 @@ public class generateSQL {
         return builtResult;
     }
 
+    // s showname
     public String searchShow(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
@@ -330,6 +332,7 @@ public class generateSQL {
         return builtResult;
     }
 
+    // e episodename
     public String searchEpisode(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
@@ -455,6 +458,7 @@ public class generateSQL {
         return builtResult;
     }
 
+    // p personname
     public String searchPerson(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
@@ -535,6 +539,7 @@ public class generateSQL {
         return builtResult;
     }
 
+    // a personname
     public String allMediaForPerson(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
@@ -603,6 +608,7 @@ public class generateSQL {
         return builtResult;
     }
 
+    // c charcter name
     public String allPeoplePlayingACharacter(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
@@ -644,6 +650,7 @@ public class generateSQL {
         return builtResult;
     }
 
+    // p platformname, platform name, platformname (Can write 1 up to 4 platforms from hulu, Disney+, Netlix, Amazon Prime)
     public String availableOnSet(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1) {
@@ -707,6 +714,7 @@ public class generateSQL {
         return builtResult;
     }
 
+    // d personname, platformname
     public String mediaByPersonAndPlatform(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1
@@ -751,6 +759,7 @@ public class generateSQL {
         return builtResult;
     }
 
+    // r genrename, platformname
     public String recommendByGenreAndPlatform(String clientCommand) {
         String builtResult = "";
         if (clientCommand.trim().split(" ", 2).length > 1
